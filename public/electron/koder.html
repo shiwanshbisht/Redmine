@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Document</title>
+    </head>
+    <style>
+        .loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+        #show {
+            width: 350px;
+            height: 350px;
+            border-radius: 200px;
+            background: #61dafb;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #show img {
+            width: 140px;
+        }
+        .animation {
+            animation: move 2s infinite ease-in-out;
+        }
+
+        @keyframes move {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+            100% {
+                transform: scale(1.5) rotate(0.5deg);
+                opacity: 0;
+            }
+        }
+
+        h1,
+        h4 {
+            color: #20456f;
+        }
+    </style>
+    <body>
+        <div class="loader">
+            <div id="show">
+                <img src="./koders.png" alt="logo" />
+                <h1>Koders</h1>
+                <h4>Your Vision, Our Kreation</h4>
+            </div>
+        </div>
+        <script>
+            function addClass() {
+                var element, name, arr;
+                element = document.getElementById("show");
+                name = "animation";
+                arr = element.className.split(" ");
+                if (arr.indexOf(name) == -1) {
+                    element.className += " " + name;
+                }
+            }
+            setTimeout(() => {
+                addClass();
+            }, 1000);
+        </script>
+    </body>
+</html>

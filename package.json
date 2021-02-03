@@ -2,7 +2,7 @@
     "name": "Koders-app",
     "version": "1.0.0",
     "description": "An electron app koders use for project management",
-    "main": "public/electron/main.js",
+    "main": "public/electron/index.js",
     "private": true,
     "build": {
         "productName": "Crystyl Companion",
@@ -26,6 +26,7 @@
         "@testing-library/jest-dom": "^5.11.4",
         "@testing-library/react": "^11.1.0",
         "@testing-library/user-event": "^12.1.10",
+        "jquery": "^3.5.1",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
         "react-scripts": "4.0.1",
