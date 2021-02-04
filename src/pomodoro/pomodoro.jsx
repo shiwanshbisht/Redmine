@@ -3,8 +3,7 @@ import Mousetrap from "mousetrap";
 import "./style.css";
 import audio from "./songs/alarm.mp3";
 import Footer from "./Footer";
-import "os";
-import axios from "axios";
+const { ipcRenderer } = window.require("electron");
 
 export default class Pomodoro extends React.Component {
     constructor() {
@@ -201,31 +200,11 @@ export default class Pomodoro extends React.Component {
                 body: "Break Time Over.",
             });
         }
-        const user = "Mohd Saquib";
-        const content = this.state.value;
-        const title = this.formatType(this.state.timeType);
-        let embed = {
-            embeds: [
-                {
-                    title: title,
-                    description: content,
-                    color: 857138,
-                    footer: {
-                        icon_url:
-                            "https://www.pngfind.com/pngs/m/49-491581_clock-icon-clock-blue-png-transparent-png-download.png",
-                        text: "Pomodoro Webhook",
-                    },
-                    author: {
-                        name: user,
-                        icon_url: user.profile_url,
-                    },
-                },
-            ],
+        const data = {
+            content: this.state.value,
+            title: this.formatType(this.state.timeType),
         };
-        await axios.post(
-            "https://discord.com/api/webhooks/780830846575312927/h_NKiNA2NyQ3YOioLVjDOedsyBhowWIf2TW7YIQuTdjT134elK_SxOTSE1tmaY-PRn5O",
-            embed
-        );
+        ipcRenderer.send("webhook", data);
     }
     handleChange = (e) => {
         this.setTimeForCode();

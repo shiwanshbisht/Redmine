@@ -1,5 +1,7 @@
+const os = require("os");
 const { app, BrowserWindow, BrowserView, ipcMain } = require("electron");
 const path = require("path");
+const axios = require("axios");
 function createWindow() {
     const mainWindow = new BrowserWindow({
         width: 1200,
@@ -23,11 +25,13 @@ function createWindow() {
     // mainWindow.webContents.openDevTools()
     const view1 = new BrowserView({
         webPreferences: {
+            nodeIntegration: true,
             contextIsolation: false,
         },
     });
     const view2 = new BrowserView({
         webPreferences: {
+            nodeIntegration: true,
             contextIsolation: false,
         },
     });
@@ -89,9 +93,36 @@ function createWindow() {
         }
     });
 }
+ipcMain.on("webhook", async (evt, arg) => {
+    const { title, content } = arg;
+    const user = os.userInfo().username;
+    let embed = {
+        embeds: [
+            {
+                title: title,
+                description: content,
+                color: 857138,
+                footer: {
+                    icon_url:
+                        "https://www.pngfind.com/pngs/m/49-491581_clock-icon-clock-blue-png-transparent-png-download.png",
+                    text: "Pomodoro Webhook",
+                },
+                author: {
+                    name: user,
+                    icon_url: user.profile_url,
+                },
+            },
+        ],
+    };
+    await axios.post(
+        "https://discord.com/api/webhooks/780830846575312927/h_NKiNA2NyQ3YOioLVjDOedsyBhowWIf2TW7YIQuTdjT134elK_SxOTSE1tmaY-PRn5O",
+        embed
+    );
+});
 ipcMain.on("close", (evt, arg) => {
     app.quit();
 });
+
 app.whenReady().then(() => {
     createWindow();
     app.on("activate", function () {
