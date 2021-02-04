@@ -17,7 +17,7 @@ function createWindow() {
         process.env.url ||
         `file://${path.join(__dirname, "../../build/index.html")}`;
 
-    const url2 = `file://${path.join(__dirname, "../../app/index.html")}`;
+    const url2 = process.env.url.trim() + "/pomodoro";
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
@@ -39,7 +39,7 @@ function createWindow() {
         x: 0,
         y: 30,
         width: bounds.width,
-        height: bounds.height,
+        height: bounds.height + 100,
     });
     view1.setAutoResize({ width: true, height: true });
     view2.setBounds({
@@ -76,7 +76,7 @@ function createWindow() {
                 x: 0,
                 y: 30,
                 width: bounds.width,
-                height: bounds.height,
+                height: bounds.height - 50,
             });
         } else if (arg === "pomodoro") {
             mainWindow.setBrowserView(view2);
@@ -84,7 +84,7 @@ function createWindow() {
                 x: 0,
                 y: 30,
                 width: bounds.width,
-                height: bounds.height,
+                height: bounds.height - 50,
             });
         }
     });

@@ -2,7 +2,11 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Document</title>
+        <link
+            href="https://fonts.googleapis.com/css?family=Montserrat"
+            rel="stylesheet"
+        />
+        <title>Koders</title>
     </head>
     <style>
         .loader {
@@ -10,6 +14,8 @@
             justify-content: center;
             align-items: center;
             height: 80vh;
+            background: url("./BG.png");
+            background-size: 1200px 700px;
         }
         #show {
             width: 350px;
@@ -20,10 +26,9 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            opacity: 0.5;
         }
-        #show img {
-            width: 140px;
-        }
+
         .animation {
             animation: move 2s infinite ease-in-out;
         }
@@ -42,19 +47,33 @@
         h4 {
             color: #20456f;
         }
+        #text {
+            position: absolute;
+            /* top: 150px;
+            left: 685px; */
+            font-family: Montserrat;
+        }
+        #text img {
+            width: 140px;
+            margin-left: 30px;
+        }
+        #name {
+            margin-left: 40px;
+        }
     </style>
     <body>
         <div class="loader">
-            <div id="show">
+            <div id="show"></div>
+            <div id="text">
                 <img src="./koders.png" alt="logo" />
-                <h1>Koders</h1>
+                <h1 id="name">Koders</h1>
                 <h4>Your Vision, Our Kreation</h4>
             </div>
         </div>
         <script>
-            function addClass() {
+            function addClass(classn) {
                 var element, name, arr;
-                element = document.getElementById("show");
+                element = document.getElementById(classn);
                 name = "animation";
                 arr = element.className.split(" ");
                 if (arr.indexOf(name) == -1) {
@@ -62,7 +81,8 @@
                 }
             }
             setTimeout(() => {
-                addClass();
+                addClass("show");
+                addClass("text");
             }, 1000);
         </script>
     </body>

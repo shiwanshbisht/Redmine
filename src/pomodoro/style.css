@@ -14,23 +14,9 @@ body {
     background-color: #272727;
 }
 
-@media (min-width: 500px) {
-    .pomodoro {
-        height: 100%;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        -webkit-box-pack: center;
-        -webkit-justify-content: center;
-        -ms-flex-pack: center;
-        justify-content: center;
-    }
+.pomodoro {
+    height: 100vh;
+    background-color: #272727;
 }
 /* Main section
 ------------------------------- */
@@ -45,16 +31,8 @@ body {
 }
 
 .container {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    -ms-flex-pack: center;
     justify-content: center;
     width: 100%;
     max-width: 900px;
@@ -74,6 +52,7 @@ body {
     display: block;
     width: 100%;
     text-align: center;
+    margin-top: 200px;
 }
 
 .timeType {
@@ -83,30 +62,6 @@ body {
     font-weight: 300;
     width: 100%;
     text-align: center;
-}
-
-/* Time control */
-.btn {
-    border: 0;
-    background: #1a4370;
-    color: #fff;
-    padding: 10px 0;
-    width: 100%;
-    max-width: 110px;
-    margin: 1px;
-    font-weight: 300;
-    -webkit-transition: background 0.3s;
-    transition: background 0.3s;
-}
-
-.btn:hover {
-    background: #325c88;
-}
-
-.btn:active,
-.btn:focus {
-    outline: 0;
-    background: #2a9f9f;
 }
 
 .btnIcon {
@@ -120,6 +75,22 @@ body {
     -webkit-transition: opacity 0.3s;
     transition: opacity 0.3s;
 }
+.input {
+    background-color: rgba(0, 0, 0, 0) !important;
+    border: none !important;
+    display: block;
+    font-size: 24px;
+    color: #1a4370;
+    font-weight: 300;
+    width: 100%;
+    text-align: center;
+}
+.input:active,
+.input:focus {
+    outline: 0;
+    background-color: rgba(0, 0, 0, 0) !important;
+    border: none !important;
+}
 
 .btnIcon:hover {
     opacity: 0.8;
@@ -132,11 +103,11 @@ body {
 }
 
 .play {
-    background-image: url("../img/play.svg");
+    background-image: url("./img/play.svg");
 }
 
 .stop {
-    background-image: url("../img/stop.svg");
+    background-image: url("./img/stop.svg");
 }
 
 /* Bottom section
@@ -286,23 +257,12 @@ body {
     font-size: 14px;
     font-weight: 300;
 }
-
-.link {
-    color: #fff;
-    text-decoration: none;
-    -webkit-transition: color 0.3s;
-    transition: color 0.3s;
+.sel {
+    color: whitesmoke !important;
+    background: var(--primary) !important;
+    outline: none !important;
+    border: none !important;
 }
-
-.link:hover {
-    opacity: 0.8;
-}
-
-.link:active. .link:focus {
-    outline: 0;
-    opacity: 0.5;
-}
-
 /* Pulse heart */
 .heart {
     margin: 0 5px;
