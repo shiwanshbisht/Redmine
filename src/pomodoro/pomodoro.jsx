@@ -15,13 +15,15 @@ export default class Pomodoro extends React.Component {
             timeType: 0,
             title: "",
             work: "",
+            value: "",
         };
         // Bind early, avoid function creation on render loop
-        this.setTimeForCode = this.setTime.bind(this, 1500);
-        this.setTimeForSocial = this.setTime.bind(this, 5);
-        this.setTimeForCoffee = this.setTime.bind(this, 900);
+        this.setTimeForCode = this.setTime.bind(this, 5);
+        this.setTimeForSocial = this.setTime.bind(this, 6);
+        this.setTimeForCoffee = this.setTime.bind(this, 7);
         this.reset = this.reset.bind(this);
         this.play = this.play.bind(this);
+        this.alert = this.alert.bind(this);
         this.elapseTime = this.elapseTime.bind(this);
     }
 
@@ -37,7 +39,7 @@ export default class Pomodoro extends React.Component {
     }
 
     setDefaultTime() {
-        let defaultTime = 1500;
+        let defaultTime = 5;
         this.setState({
             time: defaultTime,
             timeType: defaultTime,
@@ -70,9 +72,9 @@ export default class Pomodoro extends React.Component {
             ? `Working On ${this.state.work}`
             : "Select Work";
         return [
-            { type: work, time: 1500 },
-            { type: "In a Meeting", time: 5 },
-            { type: "On a Break", time: 900 },
+            { type: work, time: 5 },
+            { type: "In a Meeting", time: 6 },
+            { type: "On a Break", time: 7 },
         ];
     }
 
@@ -93,6 +95,10 @@ export default class Pomodoro extends React.Component {
     }
 
     play() {
+        if (!this.state.value) {
+            alert("Please Enter Status");
+            return;
+        }
         if (true === this.state.play) return;
 
         this.restartInterval();
@@ -116,12 +122,12 @@ export default class Pomodoro extends React.Component {
 
     setTime(newTime) {
         this.restartInterval();
-
         this.setState({
             time: newTime,
             timeType: newTime,
             title: this.getTitle(newTime),
-            play: true,
+            play: false,
+            value: "",
         });
     }
 
@@ -166,27 +172,37 @@ export default class Pomodoro extends React.Component {
     }
 
     async alert() {
+        if (!this.state.value) {
+            alert("Please Enter Status");
+            return;
+        }
         // audio
         let aud = new Audio(audio);
         aud.play();
         setTimeout(() => aud.pause(), 1400);
 
         // notification
-        if (this.state.timeType === 1500) {
-            new Notification("Relax :)", {
-                icon: "img/coffee.png",
+        if (this.state.timeType === 5) {
+            new Notification("The time is over!", {
+                icon: "img/kodes.png",
                 lang: "en",
-                body: "Go talk or drink a coffee.",
+                body: "Hey, back to Work.",
+            });
+        } else if (this.state.timeType === 6) {
+            new Notification("Relax :)", {
+                icon: "img/koders.png",
+                lang: "en",
+                body: "Meeting Time Over.",
             });
         } else {
-            new Notification("The time is over!", {
-                icon: "img/code.png",
+            new Notification("Relax :)", {
+                icon: "img/koders.png",
                 lang: "en",
-                body: "Hey, back to code!",
+                body: "Break Time Over.",
             });
         }
         const user = "Mohd Saquib";
-        const content = this.state.work;
+        const content = this.state.value;
         const title = this.formatType(this.state.timeType);
         let embed = {
             embeds: [
@@ -215,6 +231,9 @@ export default class Pomodoro extends React.Component {
         this.setTimeForCode();
         this.setState({ work: e.target.value });
     };
+    handleChangeInput = (e) => {
+        this.setState({ value: e.target.value });
+    };
     render() {
         return (
             <div className="pomodoro">
@@ -225,12 +244,18 @@ export default class Pomodoro extends React.Component {
                         </span>
                         <span className="timeType">
                             {this.formatType(this.state.timeType)}
+                            <input
+                                className="input"
+                                placeholder="Status"
+                                value={this.state.value}
+                                onChange={this.handleChangeInput}
+                            />
                         </span>
                     </div>
 
                     <div className="container display types">
                         <select
-                            className="col-3 ml-2 form-control form-select sel"
+                            className="col-2 ml-2 form-control form-select sel"
                             aria-label="Default select example"
                             onChange={this.handleChange}>
                             <option defaultValue>Select Work Type</option>
@@ -244,12 +269,12 @@ export default class Pomodoro extends React.Component {
                             <option value="Management">Management</option>
                         </select>
                         <button
-                            className="btn btn-success ml-2"
+                            className="btn btn-success col-2 ml-2"
                             onClick={this.setTimeForSocial}>
                             Meetings
                         </button>
                         <button
-                            className="btn btn-warning ml-2"
+                            className="btn btn-danger col-2 ml-2"
                             onClick={this.setTimeForCoffee}>
                             Break
                         </button>
@@ -257,12 +282,21 @@ export default class Pomodoro extends React.Component {
 
                     <div className="container">
                         <div className="controlsPlay">
-                            <button
-                                className="play btnIcon"
-                                onClick={this.play}></button>
-                            <button
-                                className="stop btnIcon"
-                                onClick={this.reset}></button>
+                            <i
+                                style={{ color: "var(--primary)" }}
+                                className="fa fa-play-circle fa-5x btnIcon"
+                                aria-hidden="true"
+                                onClick={this.play}></i>
+                            <i
+                                style={{ color: "var(--success)" }}
+                                className="fa fa-pause-circle fa-5x btnIcon"
+                                aria-hidden="true"
+                                onClick={this.reset}></i>
+                            <i
+                                style={{ color: "var(--danger)" }}
+                                className="fa fa-stop-circle fa-5x btnIcon"
+                                aria-hidden="true"
+                                onClick={this.alert}></i>
                         </div>
                     </div>
                 </div>

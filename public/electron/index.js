@@ -39,14 +39,14 @@ function createWindow() {
         x: 0,
         y: 30,
         width: bounds.width,
-        height: bounds.height + 100,
+        height: bounds.height,
     });
     view1.setAutoResize({ width: true, height: true });
     view2.setBounds({
         x: 0,
         y: 30,
         width: bounds.width,
-        height: bounds.height,
+        height: bounds.height + 50,
     });
     view2.setAutoResize({ width: true, height: true });
     mainWindow.loadURL(`file://${path.join(__dirname, "./koder.html")}`);
@@ -76,7 +76,7 @@ function createWindow() {
                 x: 0,
                 y: 30,
                 width: bounds.width,
-                height: bounds.height - 50,
+                height: bounds.height,
             });
         } else if (arg === "pomodoro") {
             mainWindow.setBrowserView(view2);
@@ -84,7 +84,7 @@ function createWindow() {
                 x: 0,
                 y: 30,
                 width: bounds.width,
-                height: bounds.height - 50,
+                height: bounds.height - 30,
             });
         }
     });
