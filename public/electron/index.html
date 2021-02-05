@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <style>
+        body {
+            margin: 0;
+        }
+        .navbar {
+            display: flex;
+            background-color: #1a4370;
+            justify-content: space-between;
+            padding: 5px;
+        }
+        .nav {
+            display: flex;
+            justify-content: end;
+            background-color: #1a4370;
+        }
+        .nav img {
+            cursor: pointer;
+        }
+        .drag {
+            -webkit-app-region: drag;
+            width: 70%;
+        }
+        #maximize {
+            height: 15px;
+            margin-top: 4px;
+            margin-left: 3px;
+            margin-right: 2px;
+        }
+        span {
+            color: white;
+            margin-left: 15px;
+            cursor: pointer;
+            font-size: medium;
+        }
+        .active {
+            background-color: #355e8a;
+            border-radius: 10px;
+            font-weight: bold;
+            padding: 5px 10px 5px 10px;
+        }
+    </style>
+    <body>
+        <div class="navbar">
+            <div>
+                <span class="active" id="kore">Kore</span>
+                <span id="pomodoro">Podomoro</span>
+            </div>
+            <div class="drag"></div>
+            <div class="nav">
+                <img id="minimize" src="./minus.png" alt="minimize" />
+                <img id="maximize" src="./square.png" alt="close" />
+                <img id="close" src="./close.png" alt="close" />
+            </div>
+        </div>
+        <script>
+            const { ipcRenderer } = require("electron");
+            document
+                .getElementById("minimize")
+                .addEventListener("click", () => {
+                    ipcRenderer.send("minimize");
+                });
+            document.getElementById("close").addEventListener("click", () => {
+                ipcRenderer.send("close");
+            });
+            document
+                .getElementById("maximize")
+                .addEventListener("click", () => {
+                    ipcRenderer.send("maximize");
+                });
+            const kore = document.getElementById("kore");
+            const pomodoro = document.getElementById("pomodoro");
+            document.getElementById("kore").addEventListener("click", () => {
+                ipcRenderer.send("navbar", "kore");
+                kore.className += " " + "active";
+                pomodoro.className = " ";
+            });
+            pomodoro.addEventListener("click", () => {
+                ipcRenderer.send("navbar", "pomodoro");
+                kore.className = " ";
+                pomodoro.className += " " + "active";
+            });
+        </script>
+    </body>
+</html>
