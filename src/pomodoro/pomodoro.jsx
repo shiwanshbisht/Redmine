@@ -3,6 +3,7 @@ import Mousetrap from "mousetrap";
 import "./style.css";
 import audio from "./songs/alarm.mp3";
 import Footer from "./Footer";
+import koders from "./img/koders.png";
 const { ipcRenderer } = window.require("electron");
 
 export default class Pomodoro extends React.Component {
@@ -181,20 +182,20 @@ export default class Pomodoro extends React.Component {
         // notification
         if (this.state.timeType === 5) {
             new Notification("The time is over!", {
-                icon: "img/kodes.png",
+                icon: koders,
                 lang: "en",
                 body: "Hey, back to Work.",
             });
             this.setTimeForCoffee();
         } else if (this.state.timeType === 6) {
             new Notification("Relax :)", {
-                icon: "img/koders.png",
+                icon: koders,
                 lang: "en",
                 body: "Meeting Time Over.",
             });
         } else {
             new Notification("Relax :)", {
-                icon: "img/koders.png",
+                icon: koders,
                 lang: "en",
                 body: "Break Time Over.",
             });
