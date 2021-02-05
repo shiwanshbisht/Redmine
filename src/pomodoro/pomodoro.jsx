@@ -219,6 +219,7 @@ export default class Pomodoro extends React.Component {
                 <div className="main">
                     <div className="container display timer">
                         <span className="time">
+                            <h1>Time Tracker</h1>
                             {this.format(this.state.time)}
                         </span>
                         <span className="timeType">
