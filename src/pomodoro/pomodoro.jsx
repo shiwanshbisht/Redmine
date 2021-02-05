@@ -67,9 +67,7 @@ export default class Pomodoro extends React.Component {
     }
 
     getFormatTypes() {
-        const work = this.state.work
-            ? `Working On ${this.state.work}`
-            : "Select Work";
+        const work = this.state.work ? `Working On ${this.state.work}` : "Work";
         return [
             { type: work, time: 5 },
             { type: "In a Meeting", time: 6 },
@@ -95,7 +93,7 @@ export default class Pomodoro extends React.Component {
 
     play() {
         if (!this.state.value) {
-            alert("Please Enter Status");
+            alert("Please enter status");
             return;
         }
         if (true === this.state.play) return;
@@ -224,8 +222,8 @@ export default class Pomodoro extends React.Component {
                         <span className="timeType">
                             {this.formatType(this.state.timeType)}
                             <input
-                                className="input"
-                                placeholder="Status"
+                                className="form-control col-5 input"
+                                placeholder="Title"
                                 value={this.state.value}
                                 onChange={this.handleChangeInput}
                             />
@@ -248,12 +246,12 @@ export default class Pomodoro extends React.Component {
                             <option value="Management">Management</option>
                         </select>
                         <button
-                            className="btn btn-success col-2 ml-2"
+                            className="btn btn-primary col-2 ml-2"
                             onClick={this.setTimeForSocial}>
                             Meetings
                         </button>
                         <button
-                            className="btn btn-danger col-2 ml-2"
+                            className="btn btn-primary col-2 ml-2"
                             onClick={this.setTimeForCoffee}>
                             Break
                         </button>
@@ -262,17 +260,14 @@ export default class Pomodoro extends React.Component {
                     <div className="container">
                         <div className="controlsPlay">
                             <i
-                                style={{ color: "var(--primary)" }}
                                 className="fa fa-play-circle fa-5x btnIcon"
                                 aria-hidden="true"
                                 onClick={this.play}></i>
                             <i
-                                style={{ color: "var(--success)" }}
                                 className="fa fa-pause-circle fa-5x btnIcon"
                                 aria-hidden="true"
                                 onClick={this.reset}></i>
                             <i
-                                style={{ color: "var(--danger)" }}
                                 className="fa fa-stop-circle fa-5x btnIcon"
                                 aria-hidden="true"
                                 onClick={this.alert}></i>
@@ -280,7 +275,7 @@ export default class Pomodoro extends React.Component {
                     </div>
                 </div>
                 <div className="bottomBar">
-                    <div className="controls">
+                    {/* <div className="controls">
                         <div className="container">
                             <div className="controlsLink">
                                 <a
@@ -291,7 +286,7 @@ export default class Pomodoro extends React.Component {
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <Footer />
                 </div>
             </div>

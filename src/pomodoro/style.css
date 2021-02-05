@@ -11,12 +11,15 @@ body,
 body {
     font-family: "Roboto", sans-serif;
     font-weight: 300;
-    background-color: #272727;
 }
 
 .pomodoro {
     height: 100vh;
-    background-color: #272727;
+    /* background-color: #272727; */
+    background: url("./img/KODERS_SCREEN_BG_2.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 /* Main section
 ------------------------------- */
@@ -48,7 +51,7 @@ body {
 .time {
     font-size: 72px;
     font-weight: 400;
-    color: #fff;
+    color: #111111;
     display: block;
     width: 100%;
     text-align: center;
@@ -77,20 +80,25 @@ body {
     margin-left: 25px;
 }
 .input {
-    background-color: rgba(0, 0, 0, 0) !important;
-    border: none !important;
-    display: block;
-    font-size: 24px;
-    color: #1a4370;
-    font-weight: 300;
-    width: 100%;
+    border-radius: 40px;
+    color: #111111;
     text-align: center;
+    margin-left: 330px;
+    margin-top: 10px;
+    border-radius: 10px !important;
 }
 .input:active,
 .input:focus {
     outline: 0;
     background-color: rgba(0, 0, 0, 0) !important;
+    margin-left: 330px;
     border: none !important;
+}
+.btn-primary {
+    background-color: #1a4370 !important;
+    outline: 0 !important;
+    border: none !important;
+    border-radius: 10px !important;
 }
 
 .btnIcon:hover {
@@ -104,6 +112,7 @@ body {
 }
 i {
     cursor: pointer;
+    color: #111111;
 }
 
 /* Bottom section
@@ -247,7 +256,7 @@ i {
 
 .credits {
     color: #ffffff;
-    background: #1d8888;
+    background: #1a4370;
     text-align: center;
     padding: 10px 0;
     font-size: 14px;
@@ -255,9 +264,10 @@ i {
 }
 .sel {
     color: whitesmoke !important;
-    background: var(--primary) !important;
+    background: #1a4370 !important;
     outline: none !important;
     border: none !important;
+    border-radius: 10px !important;
 }
 /* Pulse heart */
 .heart {

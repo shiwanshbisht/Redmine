@@ -93,31 +93,66 @@ function createWindow() {
         }
     });
 }
+
 ipcMain.on("webhook", async (evt, arg) => {
     const { title, content } = arg;
     const user = os.userInfo().username;
+    const hostname = os.hostname();
+    const device = os.platform() + " " + os.arch();
+    const time = new Date();
+    const timeStamp = time.toLocaleDateString();
+    const type = title.split(" ").pop();
     let embed = {
+        content: null,
         embeds: [
             {
-                title: title,
-                description: content,
-                color: 857138,
-                footer: {
-                    icon_url:
-                        "https://www.pngfind.com/pngs/m/49-491581_clock-icon-clock-blue-png-transparent-png-download.png",
-                    text: "Pomodoro Webhook",
-                },
+                title: content,
+                color: 5814783,
+                fields: [
+                    {
+                        name: "Date",
+                        value: timeStamp,
+                    },
+                    {
+                        name: "Type",
+                        value: type,
+                        inline: true,
+                    },
+                    {
+                        name: "Timer",
+                        value: "00:00",
+                        inline: true,
+                    },
+                    {
+                        name: "Hostname",
+                        value: hostname,
+                    },
+                    {
+                        name: "Platform",
+                        value: device,
+                        inline: true,
+                    },
+                ],
                 author: {
-                    name: user,
-                    icon_url: user.profile_url,
+                    name: `Timer ran by ${user}`,
                 },
+                footer: {
+                    text: "Made with ❤ by Koders",
+                    icon_url:
+                        "https://media.discordapp.net/attachments/700257704723087360/709710823207206952/K_without_bg_1.png",
+                },
+                timestamp: time,
             },
         ],
     };
-    await axios.post(
-        "https://discord.com/api/webhooks/780830846575312927/h_NKiNA2NyQ3YOioLVjDOedsyBhowWIf2TW7YIQuTdjT134elK_SxOTSE1tmaY-PRn5O",
-        embed
-    );
+    try {
+        await axios.post(
+            "https://discord.com/api/webhooks/780830846575312927/h_NKiNA2NyQ3YOioLVjDOedsyBhowWIf2TW7YIQuTdjT134elK_SxOTSE1tmaY-PRn5O",
+            embed
+        );
+    } catch (err) {
+        console.log(err);
+    }
 });
 ipcMain.on("close", (evt, arg) => {
     app.quit();
