@@ -185,6 +185,7 @@ export default class Pomodoro extends React.Component {
                 lang: "en",
                 body: "Hey, back to Work.",
             });
+            this.setTimeForCoffee();
         } else if (this.state.timeType === 6) {
             new Notification("Relax :)", {
                 icon: "img/koders.png",
