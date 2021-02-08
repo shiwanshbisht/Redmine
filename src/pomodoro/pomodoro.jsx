@@ -18,9 +18,9 @@ export default class Pomodoro extends React.Component {
             value: "",
         };
         // Bind early, avoid function creation on render loop
-        this.setTimeForCode = this.setTime.bind(this, 5);
-        this.setTimeForSocial = this.setTime.bind(this, 6);
-        this.setTimeForCoffee = this.setTime.bind(this, 7);
+        this.setTimeForCode = this.setTime.bind(this, 25 * 60);
+        this.setTimeForSocial = this.setTime.bind(this, 25 * 60);
+        this.setTimeForCoffee = this.setTime.bind(this, 5 * 60);
         this.reset = this.reset.bind(this);
         this.play = this.play.bind(this);
         this.alert = this.alert.bind(this);
@@ -180,24 +180,25 @@ export default class Pomodoro extends React.Component {
         setTimeout(() => aud.pause(), 1400);
 
         // notification
+	// Fix timer values
         if (this.state.timeType === 5) {
             new Notification("The time is over!", {
                 icon: koders,
                 lang: "en",
-                body: "Hey, back to Work.",
+                body: "Hey you, Let's get back to Work :)",
             });
             this.setTimeForCoffee();
         } else if (this.state.timeType === 6) {
             new Notification("Relax :)", {
                 icon: koders,
                 lang: "en",
-                body: "Meeting Time Over.",
+                body: "Meeting timer is over.",
             });
         } else {
             new Notification("Relax :)", {
                 icon: koders,
                 lang: "en",
-                body: "Break Time Over.",
+                body: "Break timer is over.",
             });
         }
         const data = {
@@ -241,7 +242,7 @@ export default class Pomodoro extends React.Component {
                             className="col-2 form-control form-select sel"
                             aria-label="Default select example"
                             onChange={this.handleChange}>
-                            <option defaultValue>Select Work Type</option>
+                            <option defaultValue>Work</option>
                             <option value="Development">Development</option>
                             <option value="Designing">Designing</option>
                             <option value="Content Creation">
