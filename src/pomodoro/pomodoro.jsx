@@ -168,6 +168,21 @@ export default class Pomodoro extends React.Component {
             ? true
             : false;
     }
+    countMinutes = (totalTime, currTime) => {
+        const ct = currTime.split(":");
+        const totalsec = parseInt(ct[0]) * 60 + parseInt(ct[1]);
+        const restSec = totalTime - totalsec;
+        if (restSec < 60) {
+            if (restSec < 10) {
+                return "00:0" + restSec;
+            }
+            return "00:" + restSec;
+        } else {
+            const mints = parseInt(restSec / 60);
+            const sec = restSec - mints * 60;
+            return mints + ":" + sec;
+        }
+    };
 
     async alert() {
         if (!this.state.value) {
@@ -178,15 +193,19 @@ export default class Pomodoro extends React.Component {
         let aud = new Audio(audio);
         aud.play();
         setTimeout(() => aud.pause(), 1400);
+        const data = {
+            content: this.state.value,
+            title: this.formatType(this.state.timeType),
+        };
 
         // notification
-
         if (this.state.timeType === 1500) {
             new Notification("The time is over!", {
                 icon: koders,
                 lang: "en",
                 body: "Hey, Let's get back to Work.",
             });
+            data.timer = this.countMinutes(1500, this.format(this.state.time));
             this.setTimeForCoffee();
         } else if (this.state.timeType === 1200) {
             new Notification("Relax :)", {
@@ -194,18 +213,15 @@ export default class Pomodoro extends React.Component {
                 lang: "en",
                 body: "Meeting timer is over.",
             });
+            data.timer = this.countMinutes(1200, this.format(this.state.time));
         } else {
             new Notification("Relax :)", {
                 icon: koders,
                 lang: "en",
                 body: "Break timer is over.",
             });
+            data.timer = this.countMinutes(300, this.format(this.state.time));
         }
-        const data = {
-            content: this.state.value,
-            title: this.formatType(this.state.timeType),
-            timer: this.format(this.state.time),
-        };
         ipcRenderer.send("webhook", data);
         this.setDefaultTime();
     }
