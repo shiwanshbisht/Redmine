@@ -1,11 +1,21 @@
 const os = require("os");
-const { app, BrowserWindow, BrowserView, ipcMain } = require("electron");
+const {
+    app,
+    BrowserWindow,
+    BrowserView,
+    ipcMain,
+    screen,
+} = require("electron");
 const path = require("path");
 const axios = require("axios");
+
 function createWindow() {
+    let { bounds } = screen.getPrimaryDisplay();
+    const width = parseInt(bounds.width * 0.8);
+    const height = parseInt(bounds.height * 0.9);
     const mainWindow = new BrowserWindow({
-        width: 1200,
-        height: 900,
+        width: width,
+        height: height,
         minWidth: 760,
         transparent: true,
         frame: false,
@@ -38,7 +48,7 @@ function createWindow() {
 
     view1.webContents.loadURL(url1);
     view2.webContents.loadURL(url2);
-    const bounds = mainWindow.getBounds();
+    bounds = mainWindow.getBounds();
     view1.setBounds({
         x: 0,
         y: 30,

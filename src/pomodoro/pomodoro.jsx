@@ -205,6 +205,7 @@ export default class Pomodoro extends React.Component {
             title: this.formatType(this.state.timeType),
         };
         ipcRenderer.send("webhook", data);
+        this.setDefaultTime();
     }
     handleChange = (e) => {
         this.setTimeForCode();
