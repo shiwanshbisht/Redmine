@@ -5,18 +5,18 @@
     "main": "public/electron/index.js",
     "private": true,
     "build": {
-        "productName": "Crystyl Companion",
-        "appId": "com.experiment.crystylcompanion",
+        "productName": "Koders app",
+        "appId": "com.experiment.kodersapp",
         "files": [
             "build/**/*"
         ],
         "win": {
             "target": "nsis",
-            "icon": "public/electron/img/win.ico"
+            "icon": "public/electron/logo.ico"
         },
         "nsis": {
-            "installerIcon": "public/electron/img/logo.ico",
-            "installerHeaderIcon": "public/electron/img/logo.ico",
+            "installerIcon": "public/electron/logo.ico",
+            "installerHeaderIcon": "public/electron/logo.ico",
             "allowToChangeInstallationDirectory": true,
             "deleteAppDataOnUninstall": true,
             "oneClick": "false"
@@ -33,18 +33,16 @@
         "mousetrap": "^1.6.5",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
-        "react-router-dom": "^5.2.0",
         "react-scripts": "4.0.1",
-        "web-vitals": "^0.2.4",
-        "whoami": "0.0.3"
+        "web-vitals": "^0.2.4"
     },
     "scripts": {
-        "start": "react-scripts start",
+        "start": "set browser=none && react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "dev": "set url=http://localhost:3000 && electron .",
-        "electron-pack": "electron-builder -c.extraMetadata.main=build/electron/main.js -w",
+        "electron-pack": "electron-builder -c.extraMetadata.main=build/electron/index.js -w",
         "preelectron-pack": "react-scripts build"
     },
     "eslintConfig": {
