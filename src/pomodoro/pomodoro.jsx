@@ -94,7 +94,7 @@ export default class Pomodoro extends React.Component {
 
     play() {
         if (!this.state.value) {
-            alert("Please enter status");
+            alert("Please enter Title");
             return;
         }
         if (true === this.state.play) return;
@@ -171,7 +171,7 @@ export default class Pomodoro extends React.Component {
 
     async alert() {
         if (!this.state.value) {
-            alert("Please Enter Status");
+            alert("Please Enter Title");
             return;
         }
         // audio
