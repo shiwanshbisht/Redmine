@@ -203,6 +203,7 @@ export default class Pomodoro extends React.Component {
         const data = {
             content: this.state.value,
             title: this.formatType(this.state.timeType),
+            timer: this.format(this.state.time),
         };
         ipcRenderer.send("webhook", data);
         this.setDefaultTime();
@@ -218,25 +219,26 @@ export default class Pomodoro extends React.Component {
         return (
             <div className="pomodoro">
                 <div className="main">
-                    <div className="container display timer">
+                    <div className="content display timer">
                         <span className="time">
                             <h1>Time Tracker</h1>
                             {this.format(this.state.time)}
                         </span>
                         <span className="timeType">
                             {this.formatType(this.state.timeType)}
-                            <input
-                                className="form-control col-5 input"
-                                placeholder="Title"
-                                value={this.state.value}
-                                onChange={this.handleChangeInput}
-                            />
+                            <div className="row d-flex justify-content-center">
+                                <input
+                                    className="form-control col-5 col-sm-3 col-md-4  input"
+                                    placeholder="Title"
+                                    value={this.state.value}
+                                    onChange={this.handleChangeInput}
+                                />
+                            </div>
                         </span>
                     </div>
-
-                    <div className="container display types">
+                    <div className="content display">
                         <select
-                            className="col-2 ml-2 form-control form-select sel"
+                            className="col-2 form-control form-select sel"
                             aria-label="Default select example"
                             onChange={this.handleChange}>
                             <option defaultValue>Select Work Type</option>
@@ -260,8 +262,7 @@ export default class Pomodoro extends React.Component {
                             Break
                         </button>
                     </div>
-
-                    <div className="container">
+                    <div className="content">
                         <div className="controlsPlay">
                             <i
                                 className="fa fa-play-circle fa-5x btnIcon"
@@ -279,18 +280,6 @@ export default class Pomodoro extends React.Component {
                     </div>
                 </div>
                 <div className="bottomBar">
-                    {/* <div className="controls">
-                        <div className="container">
-                            <div className="controlsLink">
-                                <a
-                                    href="https://en.wikipedia.org/wiki/Pomodoro_Technique"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    What is Pomodoro?
-                                </a>
-                            </div>
-                        </div>
-                    </div> */}
                     <Footer />
                 </div>
             </div>
