@@ -1,11 +1,21 @@
 const os = require("os");
-const { app, BrowserWindow, BrowserView, ipcMain } = require("electron");
+const {
+    app,
+    BrowserWindow,
+    BrowserView,
+    ipcMain,
+    screen,
+} = require("electron");
 const path = require("path");
 const axios = require("axios");
+
 function createWindow() {
+    let { bounds } = screen.getPrimaryDisplay();
+    const width = parseInt(bounds.width * 0.8);
+    const height = parseInt(bounds.height * 0.9);
     const mainWindow = new BrowserWindow({
-        width: 1200,
-        height: 900,
+        width: width,
+        height: height,
         minWidth: 760,
         transparent: true,
         frame: false,
@@ -38,17 +48,18 @@ function createWindow() {
 
     view1.webContents.loadURL(url1);
     view2.webContents.loadURL(url2);
-    const bounds = mainWindow.getBounds();
+    bounds = mainWindow.getBounds();
+    const y1 = parseInt(height * 0.029);
     view1.setBounds({
         x: 0,
-        y: 30,
+        y: y1,
         width: bounds.width,
         height: bounds.height,
     });
     view1.setAutoResize({ width: true, height: true });
     view2.setBounds({
         x: 0,
-        y: 30,
+        y: y1,
         width: bounds.width,
         height: bounds.height + 50,
     });
@@ -78,7 +89,7 @@ function createWindow() {
             mainWindow.setBrowserView(view1);
             view1.setBounds({
                 x: 0,
-                y: 30,
+                y: y1,
                 width: bounds.width,
                 height: bounds.height,
             });
@@ -86,7 +97,7 @@ function createWindow() {
             mainWindow.setBrowserView(view2);
             view2.setBounds({
                 x: 0,
-                y: 30,
+                y: y1,
                 width: bounds.width,
                 height: bounds.height - 30,
             });
@@ -95,7 +106,7 @@ function createWindow() {
 }
 
 ipcMain.on("webhook", async (evt, arg) => {
-    const { title, content } = arg;
+    const { title, content, timer } = arg;
     const user = os.userInfo().username;
     const hostname = os.hostname();
     const device = os.platform() + " " + os.arch();
@@ -120,7 +131,7 @@ ipcMain.on("webhook", async (evt, arg) => {
                     },
                     {
                         name: "Timer",
-                        value: "00:00",
+                        value: timer,
                         inline: true,
                     },
                     {
@@ -146,6 +157,10 @@ ipcMain.on("webhook", async (evt, arg) => {
         ],
     };
     try {
+        // await axios.post(
+        //     "https://discord.com/api/webhooks/780830846575312927/h_NKiNA2NyQ3YOioLVjDOedsyBhowWIf2TW7YIQuTdjT134elK_SxOTSE1tmaY-PRn5O",
+        //     embed
+        // );
         await axios.post(
             "https://discord.com/api/webhooks/808061916152070194/d0q51NFs8eWDHaQVJPKfsk1UbTYE1WlhF4r7CChWNAADOxZQs4Ke2c0n1qIuSIruFihH",
             embed

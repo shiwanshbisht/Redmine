@@ -3,6 +3,7 @@ import Mousetrap from "mousetrap";
 import "./style.css";
 import audio from "./songs/alarm.mp3";
 import Footer from "./Footer";
+import koders from "./img/koders.png";
 const { ipcRenderer } = window.require("electron");
 
 export default class Pomodoro extends React.Component {
@@ -93,7 +94,7 @@ export default class Pomodoro extends React.Component {
 
     play() {
         if (!this.state.value) {
-            alert("Please enter status");
+            alert("Please enter Title");
             return;
         }
         if (true === this.state.play) return;
@@ -170,7 +171,7 @@ export default class Pomodoro extends React.Component {
 
     async alert() {
         if (!this.state.value) {
-            alert("Please fill your work title before running the timer");
+            alert("Please Enter Title");
             return;
         }
         // audio
@@ -182,19 +183,20 @@ export default class Pomodoro extends React.Component {
 	// Fix timer values
         if (this.state.timeType === 5) {
             new Notification("The time is over!", {
-                icon: "img/kodes.png",
+                icon: koders,
                 lang: "en",
                 body: "Hey you, Let's get back to Work :)",
             });
+            this.setTimeForCoffee();
         } else if (this.state.timeType === 6) {
             new Notification("Relax :)", {
-                icon: "img/koders.png",
+                icon: koders,
                 lang: "en",
                 body: "Meeting timer is over.",
             });
         } else {
             new Notification("Relax :)", {
-                icon: "img/koders.png",
+                icon: koders,
                 lang: "en",
                 body: "Break timer is over.",
             });
@@ -202,8 +204,10 @@ export default class Pomodoro extends React.Component {
         const data = {
             content: this.state.value,
             title: this.formatType(this.state.timeType),
+            timer: this.format(this.state.time),
         };
         ipcRenderer.send("webhook", data);
+        this.setDefaultTime();
     }
     handleChange = (e) => {
         this.setTimeForCode();
@@ -216,24 +220,26 @@ export default class Pomodoro extends React.Component {
         return (
             <div className="pomodoro">
                 <div className="main">
-                    <div className="container display timer">
+                    <div className="content display timer">
                         <span className="time">
+                            <h1>Time Tracker</h1>
                             {this.format(this.state.time)}
                         </span>
                         <span className="timeType">
                             {this.formatType(this.state.timeType)}
-                            <input
-                                className="form-control col-5 input"
-                                placeholder="Title"
-                                value={this.state.value}
-                                onChange={this.handleChangeInput}
-                            />
+                            <div className="row d-flex justify-content-center">
+                                <input
+                                    className="form-control col-5 col-sm-3 col-md-4  input"
+                                    placeholder="Title"
+                                    value={this.state.value}
+                                    onChange={this.handleChangeInput}
+                                />
+                            </div>
                         </span>
                     </div>
-
-                    <div className="container display types">
+                    <div className="content display">
                         <select
-                            className="col-2 ml-2 form-control form-select sel"
+                            className="col-2 form-control form-select sel"
                             aria-label="Default select example"
                             onChange={this.handleChange}>
                             <option defaultValue>Work</option>
@@ -257,8 +263,7 @@ export default class Pomodoro extends React.Component {
                             Break
                         </button>
                     </div>
-
-                    <div className="container">
+                    <div className="content">
                         <div className="controlsPlay">
                             <i
                                 className="fa fa-play-circle fa-5x btnIcon"
@@ -276,18 +281,6 @@ export default class Pomodoro extends React.Component {
                     </div>
                 </div>
                 <div className="bottomBar">
-                    {/* <div className="controls">
-                        <div className="container">
-                            <div className="controlsLink">
-                                <a
-                                    href="https://en.wikipedia.org/wiki/Pomodoro_Technique"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    What is Pomodoro?
-                                </a>
-                            </div>
-                        </div>
-                    </div> */}
                     <Footer />
                 </div>
             </div>

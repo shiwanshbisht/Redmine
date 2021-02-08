@@ -20,26 +20,21 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 /* Main section
 ------------------------------- */
 .main {
-    margin-bottom: 61px; /* For stick footer */
+    width: 98%;
 }
 
-@media (max-width: 500px) {
-    .main {
-        margin: 40px 0;
-    }
-}
-
-.container {
+.content {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
     padding: 5px;
 }
 
@@ -55,7 +50,6 @@ body {
     display: block;
     width: 100%;
     text-align: center;
-    margin-top: 160px;
 }
 
 .timeType {
@@ -68,13 +62,6 @@ body {
 }
 
 .btnIcon {
-    border: 0;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 60px;
-    height: 60px;
-    background-size: 50px;
     -webkit-transition: opacity 0.3s;
     transition: opacity 0.3s;
     margin-left: 25px;
@@ -83,15 +70,13 @@ body {
     border-radius: 40px;
     color: #111111;
     text-align: center;
-    margin-left: 330px;
-    margin-top: 10px;
+    margin-top: 7px;
     border-radius: 10px !important;
 }
 .input:active,
 .input:focus {
     outline: 0;
     background-color: rgba(0, 0, 0, 0) !important;
-    margin-left: 330px;
     border: none !important;
 }
 .btn-primary {
