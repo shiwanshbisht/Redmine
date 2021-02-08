@@ -178,8 +178,14 @@ export default class Pomodoro extends React.Component {
             }
             return "00:" + restSec;
         } else {
-            const mints = parseInt(restSec / 60);
-            const sec = restSec - mints * 60;
+            let mints = parseInt(restSec / 60);
+            let sec = restSec - mints * 60;
+            if (mints < 10) {
+                mints = "0" + mints;
+            }
+            if (sec < 10) {
+                sec = "0" + sec;
+            }
             return mints + ":" + sec;
         }
     };
