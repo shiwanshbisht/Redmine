@@ -180,6 +180,7 @@ export default class Pomodoro extends React.Component {
         setTimeout(() => aud.pause(), 1400);
 
         // notification
+
         if (this.state.timeType === 1500) {
             new Notification("The time is over!", {
                 icon: koders,
@@ -191,13 +192,13 @@ export default class Pomodoro extends React.Component {
             new Notification("Relax :)", {
                 icon: koders,
                 lang: "en",
-                body: "Meeting Time Over.",
+                body: "Meeting timer is over.",
             });
         } else {
             new Notification("Relax :)", {
                 icon: koders,
                 lang: "en",
-                body: "Break Time Over.",
+                body: "Break timer is over.",
             });
         }
         const data = {
@@ -241,7 +242,7 @@ export default class Pomodoro extends React.Component {
                             className="col-2 form-control form-select sel"
                             aria-label="Default select example"
                             onChange={this.handleChange}>
-                            <option defaultValue>Select Work Type</option>
+                            <option defaultValue>Work</option>
                             <option value="Development">Development</option>
                             <option value="Designing">Designing</option>
                             <option value="Content Creation">
