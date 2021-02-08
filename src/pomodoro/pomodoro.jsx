@@ -18,9 +18,9 @@ export default class Pomodoro extends React.Component {
             value: "",
         };
         // Bind early, avoid function creation on render loop
-        this.setTimeForCode = this.setTime.bind(this, 25 * 60);
-        this.setTimeForSocial = this.setTime.bind(this, 25 * 60);
-        this.setTimeForCoffee = this.setTime.bind(this, 5 * 60);
+        this.setTimeForCode = this.setTime.bind(this, 1500);
+        this.setTimeForSocial = this.setTime.bind(this, 1200);
+        this.setTimeForCoffee = this.setTime.bind(this, 300);
         this.reset = this.reset.bind(this);
         this.play = this.play.bind(this);
         this.alert = this.alert.bind(this);
@@ -39,7 +39,7 @@ export default class Pomodoro extends React.Component {
     }
 
     setDefaultTime() {
-        let defaultTime = 5;
+        let defaultTime = 1500;
         this.setState({
             time: defaultTime,
             timeType: defaultTime,
@@ -70,9 +70,9 @@ export default class Pomodoro extends React.Component {
     getFormatTypes() {
         const work = this.state.work ? `Working On ${this.state.work}` : "Work";
         return [
-            { type: work, time: 5 },
-            { type: "In a Meeting", time: 6 },
-            { type: "On a Break", time: 7 },
+            { type: work, time: 1500 },
+            { type: "In a Meeting", time: 1200 },
+            { type: "On a Break", time: 300 },
         ];
     }
 
@@ -180,15 +180,15 @@ export default class Pomodoro extends React.Component {
         setTimeout(() => aud.pause(), 1400);
 
         // notification
-	// Fix timer values
-        if (this.state.timeType === 5) {
+
+        if (this.state.timeType === 1500) {
             new Notification("The time is over!", {
                 icon: koders,
                 lang: "en",
-                body: "Hey you, Let's get back to Work :)",
+                body: "Hey, Let's get back to Work.",
             });
             this.setTimeForCoffee();
-        } else if (this.state.timeType === 6) {
+        } else if (this.state.timeType === 1200) {
             new Notification("Relax :)", {
                 icon: koders,
                 lang: "en",
@@ -264,20 +264,18 @@ export default class Pomodoro extends React.Component {
                         </button>
                     </div>
                     <div className="content">
-                        <div className="controlsPlay">
-                            <i
-                                className="fa fa-play-circle fa-5x btnIcon"
-                                aria-hidden="true"
-                                onClick={this.play}></i>
-                            <i
-                                className="fa fa-pause-circle fa-5x btnIcon"
-                                aria-hidden="true"
-                                onClick={this.reset}></i>
-                            <i
-                                className="fa fa-stop-circle fa-5x btnIcon"
-                                aria-hidden="true"
-                                onClick={this.alert}></i>
-                        </div>
+                        <i
+                            className="fa fa-play-circle fa-5x btnIcon"
+                            aria-hidden="true"
+                            onClick={this.play}></i>
+                        <i
+                            className="fa fa-pause-circle fa-5x btnIcon"
+                            aria-hidden="true"
+                            onClick={this.reset}></i>
+                        <i
+                            className="fa fa-stop-circle fa-5x btnIcon"
+                            aria-hidden="true"
+                            onClick={this.alert}></i>
                     </div>
                 </div>
                 <div className="bottomBar">
