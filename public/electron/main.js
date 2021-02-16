@@ -1,4 +1,3 @@
-const os = require("os");
 const {
     app,
     BrowserWindow,
@@ -7,7 +6,6 @@ const {
     screen,
 } = require("electron");
 const path = require("path");
-const axios = require("axios");
 
 function createWindow() {
     let { bounds } = screen.getPrimaryDisplay();
@@ -102,71 +100,6 @@ function createWindow() {
         }
     });
 }
-
-ipcMain.on("webhook", async (evt, arg) => {
-    const { title, content, timer } = arg;
-    const user = os.userInfo().username;
-    const hostname = os.hostname();
-    const device = os.platform() + " " + os.arch();
-    const time = new Date();
-    const timeStamp = time.toLocaleDateString();
-    const type = title.split(" ").pop();
-    let embed = {
-        content: null,
-        embeds: [
-            {
-                title: content,
-                color: 5814783,
-                fields: [
-                    {
-                        name: "Date",
-                        value: timeStamp,
-                    },
-                    {
-                        name: "Type",
-                        value: type,
-                        inline: true,
-                    },
-                    {
-                        name: "Timer",
-                        value: timer,
-                        inline: true,
-                    },
-                    {
-                        name: "Hostname",
-                        value: hostname,
-                    },
-                    {
-                        name: "Platform",
-                        value: device,
-                        inline: true,
-                    },
-                ],
-                author: {
-                    name: `Timer ran by ${user}`,
-                },
-                footer: {
-                    text: "Made with ❤ by Koders",
-                    icon_url:
-                        "https://media.discordapp.net/attachments/700257704723087360/709710823207206952/K_without_bg_1.png",
-                },
-                timestamp: time,
-            },
-        ],
-    };
-    try {
-        // await axios.post(
-        //     "https://discord.com/api/webhooks/780830846575312927/h_NKiNA2NyQ3YOioLVjDOedsyBhowWIf2TW7YIQuTdjT134elK_SxOTSE1tmaY-PRn5O",
-        //     embed
-        // );
-        await axios.post(
-            "https://discord.com/api/webhooks/808061916152070194/d0q51NFs8eWDHaQVJPKfsk1UbTYE1WlhF4r7CChWNAADOxZQs4Ke2c0n1qIuSIruFihH",
-            embed
-        );
-    } catch (err) {
-        console.log(err);
-    }
-});
 ipcMain.on("close", (evt, arg) => {
     app.quit();
 });
