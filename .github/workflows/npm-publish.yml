@@ -20,7 +20,6 @@ jobs:
           git config --local user.name "XHunter"
           pushd .
             npx standard-version -a --no-verify --prerelease alpha --skip.commit --skip.tag --skip.changelog
-            echo ::set-env name=PACKAGE_VERSION::$(node -p -e "require('./package.json').version")
           popd
           npx standard-version -a --no-verify --prerelease alpha --skip.commit --skip.tag
         env:
