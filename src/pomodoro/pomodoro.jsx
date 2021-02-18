@@ -3,7 +3,7 @@ import Mousetrap from "mousetrap";
 import "./style.css";
 import audio from "./songs/alarm.mp3";
 import Footer from "./Footer";
-import koders from "./img/koders.png";
+import icon from "./img/koders.png";
 import axios from "axios";
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
@@ -246,7 +246,7 @@ export default class Pomodoro extends React.Component {
         // notification
         if (this.state.timeType === 5) {
             new Notification("The time is over!", {
-                icon: koders,
+                icon: icon,
                 lang: "en",
                 body: "Hey, Let's get back to Work.",
             });
@@ -254,14 +254,14 @@ export default class Pomodoro extends React.Component {
             this.setTimeForCoffee();
         } else if (this.state.timeType === 1200) {
             new Notification("Relax :)", {
-                icon: koders,
+                icon: icon,
                 lang: "en",
                 body: "Meeting timer is over.",
             });
             data.timer = this.countMinutes(1200, this.format(this.state.time));
         } else {
             new Notification("Relax :)", {
-                icon: koders,
+                icon: icon,
                 lang: "en",
                 body: "Break timer is over.",
             });
