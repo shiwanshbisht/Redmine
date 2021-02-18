@@ -5,7 +5,16 @@ import audio from "./songs/alarm.mp3";
 import Footer from "./Footer";
 import koders from "./img/koders.png";
 import axios from "axios";
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Grow from '@material-ui/core/Grow';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+import Grid from '@material-ui/core/Grid';
 
 export default class Pomodoro extends React.Component {
     constructor() {
@@ -18,6 +27,10 @@ export default class Pomodoro extends React.Component {
             work: "",
             value: "",
             pomodoros: [],
+	    options:  ['Create a merge commit', 'Squash and merge', 'Rebase and merge'],
+	    open: false,
+	    anchorRef: null, 
+	    selectedIndex: 1,
             todayPomodoros: 0,
         };
         // Bind early, avoid function creation on render loop
@@ -28,7 +41,29 @@ export default class Pomodoro extends React.Component {
         this.play = this.play.bind(this);
         this.alert = this.alert.bind(this);
         this.elapseTime = this.elapseTime.bind(this);
+	this.handleMenuItemClick = this.handleMenuItemClick.bind(this, 1);
     }
+
+    handleClick = () => {
+      console.info(`You clicked ${this.options[this.selectedIndex]}`);
+    };
+
+    handleMenuItemClick = (event, index) => {
+      this.setSelectedIndex(index);
+      this.setOpen(false);
+    };
+
+    handleToggle = () => {
+      this.setOpen((prevOpen) => !prevOpen);
+    };
+
+    handleClose = (event) => {
+      if (this.anchorRef.current && this.anchorRef.current.contains(event.target)) {
+	return;
+      }
+
+      this.setOpen(false);
+    };
 
     componentDidMount() {
         this.setDefaultTime();
@@ -328,21 +363,187 @@ export default class Pomodoro extends React.Component {
                             </span>
                         </div>
                         <div className="content display">
-                            <select
-                                className="col-2 form-control form-select sel"
-                                aria-label="Default select example"
-                                onChange={this.handleChange}>
-                                <option defaultValue>Work</option>
-                                <option value="Development">Development</option>
-                                <option value="Designing">Designing</option>
-                                <option value="Content Creation">
-                                    Content Creation
-                                </option>
-                                <option value="Marketing">Marketing</option>
-                                <option value="Planning">Planning</option>
-                                <option value="Management">Management</option>
-                            </select>
-                            <button
+		  <Grid container direction="column" alignItems="center">
+	        <Grid item xs={12}>
+	          <ButtonGroup variant="contained" color="primary" ref={this.anchorRef} aria-label="split button">
+	            <Button onClick={this.handleClick}>{this.options[this.selectedIndex]}</Button>
+	            <Button
+	              color="primary"
+	              size="small"
+	              aria-controls={this.open ? 'split-button-menu' : undefined}
+	              aria-expanded={this.open ? 'true' : undefined}
+	              aria-label="select merge strategy"
+	              aria-haspopup="menu"
+	              onClick={this.handleToggle}
+	            >
+	              <ArrowDropDownIcon />
+	            </Button>
+	          </ButtonGroup>
+	          <Popper open={this.open} anchorEl={this.anchorRef.current} role={undefined} transition disablePortal>
+	            {({ TransitionProps, placement }) => (
+		                  <Grow
+		                    {...TransitionProps}
+		                    style={{
+				                      transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+					              }}
+		                  >
+		                    <Paper>
+		                      <ClickAwayListener onClickAway={this.handleClose}>
+		                        <MenuList id="split-button-menu">
+		                          {this.options.map((option, index) => (
+					                          <MenuItem
+					                            key={option}
+					                            disabled={index === 2}
+					                            selected={index === this.selectedIndex}
+					                            onClick={(event) => this.handleMenuItemClick(event, index)}
+					                          >
+					                            {option}
+					                          </MenuItem>
+					                        ))}
+		                        </MenuList>
+		                      </ClickAwayListener>
+		                    </Paper>
+		                  </Grow>
+		                )}
+	          </Popper>
+	        </Grid>
+	      </Grid><Grid container direction="column" alignItems="center">
+	        <Grid item xs={12}>
+	          <ButtonGroup variant="contained" color="primary" ref={this.anchorRef} aria-label="split button">
+	            <Button onClick={this.handleClick}>{this.options[this.selectedIndex]}</Button>
+	            <Button
+	              color="primary"
+	              size="small"
+	              aria-controls={this.open ? 'split-button-menu' : undefined}
+	              aria-expanded={this.open ? 'true' : undefined}
+	              aria-label="select merge strategy"
+	              aria-haspopup="menu"
+	              onClick={this.handleToggle}
+	            >
+	              <ArrowDropDownIcon />
+	            </Button>
+	          </ButtonGroup>
+	          <Popper open={this.open} anchorEl={this.anchorRef.current} role={undefined} transition disablePortal>
+	            {({ TransitionProps, placement }) => (
+		                  <Grow
+		                    {...TransitionProps}
+		                    style={{
+				                      transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+					              }}
+		                  >
+		                    <Paper>
+		                      <ClickAwayListener onClickAway={this.handleClose}>
+		                        <MenuList id="split-button-menu">
+		                          {this.options.map((option, index) => (
+					                          <MenuItem
+					                            key={option}
+					                            disabled={index === 2}
+					                            selected={index === this.selectedIndex}
+					                            onClick={(event) => this.handleMenuItemClick(event, index)}
+					                          >
+					                            {option}
+					                          </MenuItem>
+					                        ))}
+		                        </MenuList>
+		                      </ClickAwayListener>
+		                    </Paper>
+		                  </Grow>
+		                )}
+	          </Popper>
+	        </Grid>
+	      </Grid><Grid container direction="column" alignItems="center">
+	        <Grid item xs={12}>
+	          <ButtonGroup variant="contained" color="primary" ref={this.anchorRef} aria-label="split button">
+	            <Button onClick={this.handleClick}>{this.options[this.selectedIndex]}</Button>
+	            <Button
+	              color="primary"
+	              size="small"
+	              aria-controls={this.open ? 'split-button-menu' : undefined}
+	              aria-expanded={this.open ? 'true' : undefined}
+	              aria-label="select merge strategy"
+	              aria-haspopup="menu"
+	              onClick={this.handleToggle}
+	            >
+	              <ArrowDropDownIcon />
+	            </Button>
+	          </ButtonGroup>
+	          <Popper open={this.open} anchorEl={this.anchorRef.current} role={undefined} transition disablePortal>
+	            {({ TransitionProps, placement }) => (
+		                  <Grow
+		                    {...TransitionProps}
+		                    style={{
+				                      transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+					              }}
+		                  >
+		                    <Paper>
+		                      <ClickAwayListener onClickAway={this.handleClose}>
+		                        <MenuList id="split-button-menu">
+		                          {this.options.map((option, index) => (
+					                          <MenuItem
+					                            key={option}
+					                            disabled={index === 2}
+					                            selected={index === this.selectedIndex}
+					                            onClick={(event) => handleMenuItemClick(event, index)}
+					                          >
+					                            {option}
+					                          </MenuItem>
+					                        ))}
+		                        </MenuList>
+		                      </ClickAwayListener>
+		                    </Paper>
+		                  </Grow>
+		                )}
+	          </Popper>
+	        </Grid>
+	      </Grid>iner direction="column" alignItems="center">
+      <Grid item xs={12}>
+        <ButtonGroup variant="contained" color="primary" ref={this.anchorRef} aria-label="split button">
+          <Button onClick={this.handleClick}>{this.options[this.selectedIndex]}</Button>
+          <Button
+            color="primary"
+            size="small"
+            aria-controls={this.open ? 'split-button-menu' : undefined}
+            aria-expanded={this.open ? 'true' : undefined}
+            aria-label="select merge strategy"
+            aria-haspopup="menu"
+            onClick={this.handleToggle}
+          >
+            <ArrowDropDownIcon />
+          </Button>
+        </ButtonGroup>
+        <Popper open={this.open} anchorEl={this.anchorRef.current} role={undefined} transition disablePortal>
+          {({ TransitionProps, placement }) => (
+            <Grow
+              {...TransitionProps}
+              style={{
+                transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+              }}
+            >
+              <Paper>
+                <ClickAwayListener onClickAway={this.handleClose}>
+                  <MenuList id="split-button-menu">
+                    {this.options.map((option, index) => (
+                      <MenuItem
+                        key={option}
+                        disabled={index === 2}
+                        selected={index === this.selectedIndex}
+                        onClick={(event) => this.handleMenuItemClick(event, index)}
+                      >
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          )}
+        </Popper>
+      </Grid>
+			<Button variant="contained" color="primary">
+			  Meetings
+			</Button>
+
+	  { /*                            <button
                                 className="btn btn-primary col-2 ml-2"
                                 onClick={this.setTimeForSocial}>
                                 Meetings
@@ -352,11 +553,17 @@ export default class Pomodoro extends React.Component {
                                 onClick={this.setTimeForCoffee}>
                                 Break
                             </button>
+	  */ }
                         </div>
                         <div className="content">
-			  <Button color="primary" onClick={this.play}>Play</Button>
-			  <Button color="primary" onClick={this.stop}>Stop</Button>
-	  { /* <i
+			<Button variant="contained" color="primary">
+			  Play
+			</Button>
+	  &nbsp;
+			<Button variant="contained" color="primary">
+			  Stop
+			</Button>
+		{ /* <i
                                 className="fa fa-play-circle fa-5x btnIcon"
                                 aria-hidden="true"
                                 onClick={this.play}></i>
@@ -367,8 +574,7 @@ export default class Pomodoro extends React.Component {
                             <i
                                 className="fa fa-stop-circle fa-5x btnIcon"
                                 aria-hidden="true"
-                                onClick={this.alert}></i>
-				*/}
+                                onClick={this.alert}></i> */}
                         </div>
                     </div>
                 </div>
