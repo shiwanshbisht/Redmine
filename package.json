@@ -1,28 +1,17 @@
 {
-    "name": "Koders-app",
-    "version": "1.0.0",
+    "name": "Koders-Knights",
+    "version": "0.2.0",
     "description": "An electron app koders use for project management",
-    "main": "public/electron/main.js",
     "private": true,
     "build": {
-        "productName": "Koders app",
+        "productName": "Koders Knights",
         "appId": "com.experiment.kodersapp",
         "files": [
             "build/**/*"
-        ],
-        "win": {
-            "target": "nsis",
-            "icon": "public/electron/logo.ico"
-        },
-        "nsis": {
-            "installerIcon": "public/electron/logo.ico",
-            "installerHeaderIcon": "public/electron/logo.ico",
-            "allowToChangeInstallationDirectory": true,
-            "deleteAppDataOnUninstall": true,
-            "oneClick": "false"
-        }
+        ]
     },
     "dependencies": {
+        "@material-ui/core": "^4.11.3",
         "@testing-library/jest-dom": "^5.11.4",
         "@testing-library/react": "^11.1.0",
         "@testing-library/user-event": "^12.1.10",
@@ -42,9 +31,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "dev": "set url=http://localhost:3000 && electron .",
-        "electron-pack": "electron-builder -c.extraMetadata.main=build/electron/main.js -w",
-        "preelectron-pack": "react-scripts build"
+        "dev": "set url=http://localhost:3000 && electron ."
     },
     "eslintConfig": {
         "extends": [
@@ -74,8 +61,5 @@
     "bugs": {
         "url": "https://github.com/koders-in/Koders-app/issues"
     },
-    "homepage": "./",
-    "devDependencies": {
-        "electron": "^11.2.2"
-    }
+    "homepage": "./"
 }

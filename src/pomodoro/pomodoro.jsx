@@ -4,10 +4,8 @@ import "./style.css";
 import audio from "./songs/alarm.mp3";
 import Footer from "./Footer";
 import koders from "./img/koders.png";
-import TotalPomodoros from "./TotalPomodoros";
 import axios from "axios";
-const fs = window.require("fs");
-const os = window.require("os");
+import { Button } from '@material-ui/core';
 
 export default class Pomodoro extends React.Component {
     constructor() {
@@ -36,15 +34,6 @@ export default class Pomodoro extends React.Component {
         this.setDefaultTime();
         this.startShortcuts();
         Notification.requestPermission();
-        fs.readFile("file.json", (err, data) => {
-            if (data) {
-                const pomodoros = JSON.parse(data.toString());
-                let todayPomodoros = pomodoros.filter(
-                    (p) => (p.date = new Date().toLocaleDateString())
-                ).length;
-                this.setState({ pomodoros, todayPomodoros });
-            }
-        });
     }
     getTitle(time) {
         time = typeof time === "undefined" ? this.state.time : time;
@@ -245,39 +234,14 @@ export default class Pomodoro extends React.Component {
         }
         this.sendWebhook(data);
         let newEntry = [{ ...data }];
-        try {
-            fs.readFile("file.json", (err, data) => {
-                if (data) {
-                    const obj = JSON.parse(data.toString());
-                    newEntry = [...obj, ...newEntry];
-                }
-                let pomodoros = newEntry;
-                let totalPomodoro = pomodoros.filter(
-                    (p) => (p.date = new Date().toLocaleDateString())
-                ).length;
-                this.setState({ pomodoros, totalPomodoro });
-                fs.writeFile(
-                    "file.json",
-                    JSON.stringify(newEntry, null, "  "),
-                    "utf-8",
-                    (error, data) => {
-                        if (error) {
-                            console.error("error: " + error);
-                        }
-                    }
-                );
-            });
-        } catch (error) {
-            alert(error);
-        }
         this.setDefaultTime();
     }
     sendWebhook = async (data) => {
         const { type, title, timer, time, date } = data;
         alert(JSON.stringify(data, 2, " "));
-        const user = os.userInfo().username;
-        const hostname = os.hostname();
-        const device = os.platform() + " " + os.arch();
+        const user = "Test username";
+        const hostname = "Test hostname";
+        const device = "Test device";
         let embed = {
             content: null,
             embeds: [
@@ -344,52 +308,7 @@ export default class Pomodoro extends React.Component {
     render() {
         return (
             <div className="pomodoro">
-                <div className="smcard">
-                    <div>
-                        <span>Monday</span>
-                    </div>
-                    <div>
-                        <span>{this.state.todayPomodoros}</span>
-                    </div>
-                    <div>
-                        <span>Tuesday</span>
-                    </div>
-                    <div>
-                        <span>{this.state.todayPomodoros}</span>
-                    </div>
-                    <div>
-                        <span>Wednesday</span>
-                    </div>
-                    <div>
-                        <span>{this.state.todayPomodoros}</span>
-                    </div>
-                    <div>
-                        <span>Thursday</span>
-                    </div>
-                    <div>
-                        <span>{this.state.todayPomodoros}</span>
-                    </div>
-                    <div>
-                        <span>Friday</span>
-                    </div>
-                    <div>
-                        <span>{this.state.todayPomodoros}</span>
-                    </div>
-                    <div>
-                        <span>Friday</span>
-                    </div>
-                    <div>
-                        <span>{this.state.todayPomodoros}</span>
-                    </div>
-                    <div>
-                        <span>Saturday</span>
-                    </div>
-                    <div>
-                        <span>{this.state.todayPomodoros}</span>
-                    </div>
-                </div>
                 <div className="main d-flex">
-                    <TotalPomodoros pomodoros={this.state.pomodoros} />
                     <div className="flex-fill">
                         <div className="content display timer ">
                             <span className="time">
@@ -435,7 +354,9 @@ export default class Pomodoro extends React.Component {
                             </button>
                         </div>
                         <div className="content">
-                            <i
+			  <Button color="primary" onClick={this.play}>Play</Button>
+			  <Button color="primary" onClick={this.stop}>Stop</Button>
+	  { /* <i
                                 className="fa fa-play-circle fa-5x btnIcon"
                                 aria-hidden="true"
                                 onClick={this.play}></i>
@@ -447,6 +368,7 @@ export default class Pomodoro extends React.Component {
                                 className="fa fa-stop-circle fa-5x btnIcon"
                                 aria-hidden="true"
                                 onClick={this.alert}></i>
+				*/}
                         </div>
                     </div>
                 </div>
