@@ -2,7 +2,7 @@
     "name": "Koders-app",
     "version": "1.0.0",
     "description": "An electron app koders use for project management",
-    "main": "public/electron/index.js",
+    "main": "public/electron/main.js",
     "private": true,
     "build": {
         "productName": "Koders app",
@@ -42,7 +42,7 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "dev": "set url=http://localhost:3000 && electron .",
-        "electron-pack": "electron-builder -c.extraMetadata.main=build/electron/index.js -w",
+        "electron-pack": "electron-builder -c.extraMetadata.main=build/electron/main.js -w",
         "preelectron-pack": "react-scripts build"
     },
     "eslintConfig": {

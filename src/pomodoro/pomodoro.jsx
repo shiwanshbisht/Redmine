@@ -4,7 +4,10 @@ import "./style.css";
 import audio from "./songs/alarm.mp3";
 import Footer from "./Footer";
 import koders from "./img/koders.png";
-const { ipcRenderer } = window.require("electron");
+import TotalPomodoros from "./TotalPomodoros";
+import axios from "axios";
+const fs = window.require("fs");
+const os = window.require("os");
 
 export default class Pomodoro extends React.Component {
     constructor() {
@@ -16,9 +19,11 @@ export default class Pomodoro extends React.Component {
             title: "",
             work: "",
             value: "",
+            pomodoros: [],
+            todayPomodoros: 0,
         };
         // Bind early, avoid function creation on render loop
-        this.setTimeForCode = this.setTime.bind(this, 1500);
+        this.setTimeForCode = this.setTime.bind(this, 5);
         this.setTimeForSocial = this.setTime.bind(this, 1200);
         this.setTimeForCoffee = this.setTime.bind(this, 300);
         this.reset = this.reset.bind(this);
@@ -31,6 +36,15 @@ export default class Pomodoro extends React.Component {
         this.setDefaultTime();
         this.startShortcuts();
         Notification.requestPermission();
+        fs.readFile("file.json", (err, data) => {
+            if (data) {
+                const pomodoros = JSON.parse(data.toString());
+                let todayPomodoros = pomodoros.filter(
+                    (p) => (p.date = new Date().toLocaleDateString())
+                ).length;
+                this.setState({ pomodoros, todayPomodoros });
+            }
+        });
     }
     getTitle(time) {
         time = typeof time === "undefined" ? this.state.time : time;
@@ -39,7 +53,7 @@ export default class Pomodoro extends React.Component {
     }
 
     setDefaultTime() {
-        let defaultTime = 1500;
+        let defaultTime = 5;
         this.setState({
             time: defaultTime,
             timeType: defaultTime,
@@ -70,7 +84,7 @@ export default class Pomodoro extends React.Component {
     getFormatTypes() {
         const work = this.state.work ? `Working On ${this.state.work}` : "Work";
         return [
-            { type: work, time: 1500 },
+            { type: work, time: 5 },
             { type: "In a Meeting", time: 1200 },
             { type: "On a Break", time: 300 },
         ];
@@ -125,7 +139,6 @@ export default class Pomodoro extends React.Component {
             timeType: newTime,
             title: this.getTitle(newTime),
             play: false,
-            value: "",
         });
     }
 
@@ -144,7 +157,6 @@ export default class Pomodoro extends React.Component {
     toggleMode(gotoDirection) {
         let timeTypes = this.getFormatTypes();
         let currentPosition = -1;
-
         for (let i = 0; i < timeTypes.length; i++) {
             if (timeTypes[i].time === this.state.timeType) {
                 currentPosition = i;
@@ -199,19 +211,22 @@ export default class Pomodoro extends React.Component {
         let aud = new Audio(audio);
         aud.play();
         setTimeout(() => aud.pause(), 1400);
+        const time = new Date();
         const data = {
-            content: this.state.value,
-            title: this.formatType(this.state.timeType),
+            type: this.formatType(this.state.timeType).split(" ").pop(),
+            title: this.state.value,
+            date: time.toLocaleDateString(),
+            time: time,
         };
 
         // notification
-        if (this.state.timeType === 1500) {
+        if (this.state.timeType === 5) {
             new Notification("The time is over!", {
                 icon: koders,
                 lang: "en",
                 body: "Hey, Let's get back to Work.",
             });
-            data.timer = this.countMinutes(1500, this.format(this.state.time));
+            data.timer = this.countMinutes(5, this.format(this.state.time));
             this.setTimeForCoffee();
         } else if (this.state.timeType === 1200) {
             new Notification("Relax :)", {
@@ -228,9 +243,97 @@ export default class Pomodoro extends React.Component {
             });
             data.timer = this.countMinutes(300, this.format(this.state.time));
         }
-        ipcRenderer.send("webhook", data);
+        this.sendWebhook(data);
+        let newEntry = [{ ...data }];
+        try {
+            fs.readFile("file.json", (err, data) => {
+                if (data) {
+                    const obj = JSON.parse(data.toString());
+                    newEntry = [...obj, ...newEntry];
+                }
+                let pomodoros = newEntry;
+                let totalPomodoro = pomodoros.filter(
+                    (p) => (p.date = new Date().toLocaleDateString())
+                ).length;
+                this.setState({ pomodoros, totalPomodoro });
+                fs.writeFile(
+                    "file.json",
+                    JSON.stringify(newEntry, null, "  "),
+                    "utf-8",
+                    (error, data) => {
+                        if (error) {
+                            console.error("error: " + error);
+                        }
+                    }
+                );
+            });
+        } catch (error) {
+            alert(error);
+        }
         this.setDefaultTime();
     }
+    sendWebhook = async (data) => {
+        const { type, title, timer, time, date } = data;
+        alert(JSON.stringify(data, 2, " "));
+        const user = os.userInfo().username;
+        const hostname = os.hostname();
+        const device = os.platform() + " " + os.arch();
+        let embed = {
+            content: null,
+            embeds: [
+                {
+                    title: title,
+                    color: 5814783,
+                    fields: [
+                        {
+                            name: "Date",
+                            value: date,
+                        },
+                        {
+                            name: "Type",
+                            value: type,
+                            inline: true,
+                        },
+                        {
+                            name: "Timer",
+                            value: timer,
+                            inline: true,
+                        },
+                        {
+                            name: "Hostname",
+                            value: hostname,
+                        },
+                        {
+                            name: "Platform",
+                            value: device,
+                            inline: true,
+                        },
+                    ],
+                    author: {
+                        name: `Timer ran by ${user}`,
+                    },
+                    footer: {
+                        text: "Made with ❤ by Koders",
+                        icon_url:
+                            "https://media.discordapp.net/attachments/700257704723087360/709710823207206952/K_without_bg_1.png",
+                    },
+                    timestamp: time,
+                },
+            ],
+        };
+        try {
+            await axios.post(
+                "https://discord.com/api/webhooks/780830846575312927/h_NKiNA2NyQ3YOioLVjDOedsyBhowWIf2TW7YIQuTdjT134elK_SxOTSE1tmaY-PRn5O",
+                embed
+            );
+            // await axios.post(
+            //     "https://discord.com/api/webhooks/808061916152070194/d0q51NFs8eWDHaQVJPKfsk1UbTYE1WlhF4r7CChWNAADOxZQs4Ke2c0n1qIuSIruFihH",
+            //     embed
+            // );
+        } catch (err) {
+            alert(err);
+        }
+    };
     handleChange = (e) => {
         this.setTimeForCode();
         this.setState({ work: e.target.value });
@@ -241,63 +344,110 @@ export default class Pomodoro extends React.Component {
     render() {
         return (
             <div className="pomodoro">
-                <div className="main">
-                    <div className="content display timer">
-                        <span className="time">
-                            <h1>Time Tracker</h1>
-                            {this.format(this.state.time)}
-                        </span>
-                        <span className="timeType">
-                            {this.formatType(this.state.timeType)}
-                            <div className="row d-flex justify-content-center">
-                                <input
-                                    className="form-control col-5 col-sm-3 col-md-4  input"
-                                    placeholder="Title"
-                                    value={this.state.value}
-                                    onChange={this.handleChangeInput}
-                                />
-                            </div>
-                        </span>
+                <div className="smcard">
+                    <div>
+                        <span>Monday</span>
                     </div>
-                    <div className="content display">
-                        <select
-                            className="col-2 form-control form-select sel"
-                            aria-label="Default select example"
-                            onChange={this.handleChange}>
-                            <option defaultValue>Work</option>
-                            <option value="Development">Development</option>
-                            <option value="Designing">Designing</option>
-                            <option value="Content Creation">
-                                Content Creation
-                            </option>
-                            <option value="Marketing">Marketing</option>
-                            <option value="Planning">Planning</option>
-                            <option value="Management">Management</option>
-                        </select>
-                        <button
-                            className="btn btn-primary col-2 ml-2"
-                            onClick={this.setTimeForSocial}>
-                            Meetings
-                        </button>
-                        <button
-                            className="btn btn-primary col-2 ml-2"
-                            onClick={this.setTimeForCoffee}>
-                            Break
-                        </button>
+                    <div>
+                        <span>{this.state.todayPomodoros}</span>
                     </div>
-                    <div className="content">
-                        <i
-                            className="fa fa-play-circle fa-5x btnIcon"
-                            aria-hidden="true"
-                            onClick={this.play}></i>
-                        <i
-                            className="fa fa-pause-circle fa-5x btnIcon"
-                            aria-hidden="true"
-                            onClick={this.reset}></i>
-                        <i
-                            className="fa fa-stop-circle fa-5x btnIcon"
-                            aria-hidden="true"
-                            onClick={this.alert}></i>
+                    <div>
+                        <span>Tuesday</span>
+                    </div>
+                    <div>
+                        <span>{this.state.todayPomodoros}</span>
+                    </div>
+                    <div>
+                        <span>Wednesday</span>
+                    </div>
+                    <div>
+                        <span>{this.state.todayPomodoros}</span>
+                    </div>
+                    <div>
+                        <span>Thursday</span>
+                    </div>
+                    <div>
+                        <span>{this.state.todayPomodoros}</span>
+                    </div>
+                    <div>
+                        <span>Friday</span>
+                    </div>
+                    <div>
+                        <span>{this.state.todayPomodoros}</span>
+                    </div>
+                    <div>
+                        <span>Friday</span>
+                    </div>
+                    <div>
+                        <span>{this.state.todayPomodoros}</span>
+                    </div>
+                    <div>
+                        <span>Saturday</span>
+                    </div>
+                    <div>
+                        <span>{this.state.todayPomodoros}</span>
+                    </div>
+                </div>
+                <div className="main d-flex">
+                    <TotalPomodoros pomodoros={this.state.pomodoros} />
+                    <div className="flex-fill">
+                        <div className="content display timer ">
+                            <span className="time">
+                                <h1>Time Tracker</h1>
+                                {this.format(this.state.time)}
+                            </span>
+                            <span className="timeType">
+                                {this.formatType(this.state.timeType)}
+                                <div className="row d-flex justify-content-center">
+                                    <input
+                                        className="form-control col-5 col-sm-3 col-md-4  input"
+                                        placeholder="Title"
+                                        value={this.state.value}
+                                        onChange={this.handleChangeInput}
+                                    />
+                                </div>
+                            </span>
+                        </div>
+                        <div className="content display">
+                            <select
+                                className="col-2 form-control form-select sel"
+                                aria-label="Default select example"
+                                onChange={this.handleChange}>
+                                <option defaultValue>Work</option>
+                                <option value="Development">Development</option>
+                                <option value="Designing">Designing</option>
+                                <option value="Content Creation">
+                                    Content Creation
+                                </option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Planning">Planning</option>
+                                <option value="Management">Management</option>
+                            </select>
+                            <button
+                                className="btn btn-primary col-2 ml-2"
+                                onClick={this.setTimeForSocial}>
+                                Meetings
+                            </button>
+                            <button
+                                className="btn btn-primary col-2 ml-2"
+                                onClick={this.setTimeForCoffee}>
+                                Break
+                            </button>
+                        </div>
+                        <div className="content">
+                            <i
+                                className="fa fa-play-circle fa-5x btnIcon"
+                                aria-hidden="true"
+                                onClick={this.play}></i>
+                            <i
+                                className="fa fa-pause-circle fa-5x btnIcon"
+                                aria-hidden="true"
+                                onClick={this.reset}></i>
+                            <i
+                                className="fa fa-stop-circle fa-5x btnIcon"
+                                aria-hidden="true"
+                                onClick={this.alert}></i>
+                        </div>
                     </div>
                 </div>
                 <div className="bottomBar">
