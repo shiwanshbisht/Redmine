@@ -5,6 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "font-awesome/css/font-awesome.min.css";
 import Pomodoro from "./pomodoro/pomodoro";
+import Report from "./pomodoro/report";
 
 ReactDOM.render(
     <React.StrictMode>

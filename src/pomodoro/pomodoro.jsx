@@ -5,23 +5,14 @@ import audio from "./songs/alarm.mp3";
 import Footer from "./Footer";
 import icon from "./img/koders.png";
 import axios from "axios";
-import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
-import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Grow from "@material-ui/core/Grow";
-import Paper from "@material-ui/core/Paper";
-import Popper from "@material-ui/core/Popper";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuList from "@material-ui/core/MenuList";
-import Grid from "@material-ui/core/Grid";
-import ControlledOpenSelect from "./ControlledOpenSelect";
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import StopIcon from '@material-ui/icons/Stop';
 import TextField from "@material-ui/core/TextField";
 import Typography from '@material-ui/core/Typography';
+import Dialog from './dialog';
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 
 export default class Pomodoro extends React.Component {
   constructor() {
@@ -34,11 +25,6 @@ export default class Pomodoro extends React.Component {
       work: "",
       value: "",
       pomodoros: [],
-      options: [
-        "Create a merge commit",
-        "Squash and merge",
-        "Rebase and merge",
-      ],
       open: false,
       anchorRef: null,
       selectedIndex: 1,
@@ -127,7 +113,6 @@ export default class Pomodoro extends React.Component {
     return [
       { type: work, time: 1500 },
       { type: "Meeting", time: 1200 },
-      { type: "On a Break", time: 300 },
     ];
   }
 
@@ -169,7 +154,6 @@ export default class Pomodoro extends React.Component {
 
   togglePlay() {
     if (true === this.state.play) return this.reset();
-
     return this.play();
   }
 
@@ -347,242 +331,67 @@ export default class Pomodoro extends React.Component {
   handleChangeInput = (e) => {
     this.setState({ value: e.target.value });
   };
+
+  timerProps = {
+  strokeWidth: 6
+  };
+
+  renderTimer = (timer) => {
+    return(
+      <div>
+    <CountdownCircleTimer style={{width: 'auto'}}
+      {...this.timerProps}
+	isPlaying={this.state.play}
+	duration={1200}
+	colors={[
+	  ['#004777', 0.33],
+	  ['#F7B801', 0.33],
+	  ['#A30000', 0.33],
+	]}
+      >
+      {({ elapsedTime }) =>
+	  this.renderTime(this.format(this.state.time))
+	}
+      </CountdownCircleTimer>
+      </div>
+    )
+  };
+  renderTime = (dimension, time) => {
+  return (
+    <div className="flex-fill">
+      <div className="time">{time}</div>
+      <Typography variant="h3"> {dimension} </Typography>
+      <Typography variant="h5"> {this.state.work} </Typography>
+    </div>
+  )};
   render() {
     return (
       <div className="pomodoro">
         <div className="main d-flex">
           <div className="flex-fill">
             <div className="content display timer ">
-              <span className="time">
-	      <Typography variant="h5"> Tracker </Typography>
-	      <Typography variant="h2"> {this.format(this.state.time)} </Typography>
-                
-              </span>
-              <span className="timeType">
-		<Typography variant="h5"> {this.formatType(this.state.timeType)} </Typography>
-	       <br /> 
-      {/*
-                <div className="row d-flex justify-content-center">
-                  <input
-                    className="form-control col-5 col-sm-3 col-md-4  input"
-                    placeholder="Title"
-                    value={this.state.value}
-                    onChange={this.handleChangeInput}
-                  />
-                </div>
-		*/}
-      <form>
-	      <TextField id="outlined-basic" style={{ width: '500px' }} label="What are you working on?" value={this.state.value} onChange={this.handleChangeInput} variant="outlined" />
+		<span className="timeType">
+		  { this.renderTimer(this.state.time) }
+		</span>
+		<form>
+		<TextField id="outlined-basic" style={{ width: '300px', margin: '20px' }} label="What are you working on?" value={this.state.value} onChange={this.handleChangeInput} variant="outlined" />
       </form>
-              </span>
             </div>
             <div className="content display">
-              {/*} <Grid container direction="column" alignItems="center">
-	        <Grid item xs={12}>
-	          <ButtonGroup variant="contained" color="primary" ref={this.state.anchorRef} aria-label="split button">
-	            <Button onClick={this.handleClick}>{this.state.options[this.selectedIndex]}</Button>
-	            <Button
-	              color="primary"
-	              size="small"
-	              aria-controls={this.state.open ? 'split-button-menu' : undefined}
-	              aria-expanded={this.state.open ? 'true' : undefined}
-	              aria-label="select merge strategy"
-	              aria-haspopup="menu"
-	              onClick={this.handleToggle}
-	            >
-	              <ArrowDropDownIcon />
-	            </Button>
-	          </ButtonGroup>
-	          <Popper open={this.state.open} anchorEl={this.state.anchorRef} role={undefined} transition disablePortal>
-	            {({ TransitionProps, placement }) => (
-		                  <Grow
-		                    {...TransitionProps}
-		                    style={{
-				                      transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-					              }}
-		                  >
-		                    <Paper>
-		                      <ClickAwayListener onClickAway={this.handleClose}>
-		                        <MenuList id="split-button-menu">
-		                          {this.state.options.map((option, index) => (
-					                          <MenuItem
-					                            key={option}
-					                            disabled={index === 2}
-					                            selected={index === this.selectedIndex}
-					                            onClick={(event) => this.handleMenuItemClick(event, index)}
-					                          >
-					                            {option}
-					                          </MenuItem>
-					                        ))}
-		                        </MenuList>
-		                      </ClickAwayListener>
-		                    </Paper>
-		                  </Grow>
-		                )}
-	          </Popper>
-	        </Grid>
-	      </Grid><Grid container direction="column" alignItems="center">
-	        <Grid item xs={12}>
-	          <ButtonGroup variant="contained" color="primary" ref={this.state.anchorRef} aria-label="split button">
-	            <Button onClick={this.handleClick}>{this.state.options[this.selectedIndex]}</Button>
-	            <Button
-	              color="primary"
-	              size="small"
-	              aria-controls={this.open ? 'split-button-menu' : undefined}
-	              aria-expanded={this.open ? 'true' : undefined}
-	              aria-label="select merge strategy"
-	              aria-haspopup="menu"
-	              onClick={this.handleToggle}
-	            >
-	              <ArrowDropDownIcon />
-	            </Button>
-	          </ButtonGroup>
-	          <Popper open={this.state.open} anchorEl={this.state.anchorRef} role={undefined} transition disablePortal>
-	            {({ TransitionProps, placement }) => (
-		                  <Grow
-		                    {...TransitionProps}
-		                    style={{
-				                      transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-					              }}
-		                  >
-		                    <Paper>
-		                      <ClickAwayListener onClickAway={this.handleClose}>
-		                        <MenuList id="split-button-menu">
-		                          {this.state.options.map((option, index) => (
-					                          <MenuItem
-					                            key={option}
-					                            disabled={index === 2}
-					                            selected={index === this.selectedIndex}
-					                            onClick={(event) => this.handleMenuItemClick(event, index)}
-					                          >
-					                            {option}
-					                          </MenuItem>
-					                        ))}
-		                        </MenuList>
-		                      </ClickAwayListener>
-		                    </Paper>
-		                  </Grow>
-		                )}
-	          </Popper>
-	        </Grid>
-	      </Grid><Grid container direction="column" alignItems="center">
-	        <Grid item xs={12}>
-	          <ButtonGroup variant="contained" color="primary" ref={this.state.anchorRef} aria-label="split button">
-	            <Button onClick={this.handleClick}>{this.state.options[this.selectedIndex]}</Button>
-	            <Button
-	              color="primary"
-	              size="small"
-	              aria-controls={this.state.open ? 'split-button-menu' : undefined}
-	              aria-expanded={this.state.open ? 'true' : undefined}
-	              aria-label="select merge strategy"
-	              aria-haspopup="menu"
-	              onClick={this.handleToggle}
-	            >
-	              <ArrowDropDownIcon />
-	            </Button>
-	          </ButtonGroup>
-	          <Popper open={this.state.open} anchorEl={this.state.anchorRef} role={undefined} transition disablePortal>
-	            {({ TransitionProps, placement }) => (
-		                  <Grow
-		                    {...TransitionProps}
-		                    style={{
-				                      transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-					              }}
-		                  >
-		                    <Paper>
-		                      <ClickAwayListener onClickAway={this.handleClose}>
-		                        <MenuList id="split-button-menu">
-		                          {this.state.options.map((option, index) => (
-					                          <MenuItem
-					                            key={option}
-					                            disabled={index === 2}
-					                            selected={index === this.selectedIndex}
-					                            onClick={(event) => this.handleMenuItemClick(event, index)}
-					                          >
-					                            {option}
-					                          </MenuItem>
-					                        ))}
-		                        </MenuList>
-		                      </ClickAwayListener>
-		                    </Paper>
-		                  </Grow>
-		                )}
-	          </Popper>
-	        </Grid>
-	      </Grid>
-      <Grid item xs={12}>
-        <ButtonGroup variant="contained" color="primary" ref={this.state.anchorRef} aria-label="split button">
-          <Button onClick={this.handleClick}>{this.state.options[this.selectedIndex]}</Button>
-          <Button
-            color="primary"
-            size="small"
-            aria-controls={this.state.open ? 'split-button-menu' : undefined}
-            aria-expanded={this.state.open ? 'true' : undefined}
-            aria-label="select merge strategy"
-            aria-haspopup="menu"
-            onClick={this.handleToggle}
-          >
-            <ArrowDropDownIcon />
-          </Button>
-        </ButtonGroup>
-        <Popper open={this.state.open} anchorEl={this.state.anchorRef} role={undefined} transition disablePortal>
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              style={{
-                transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-              }}
-            >
-              <Paper>
-                <ClickAwayListener onClickAway={this.handleClose}>
-                  <MenuList id="split-button-menu">
-                    {this.state.options.map((option, index) => (
-                      <MenuItem
-                        key={option}
-                        disabled={index === 2}
-                        selected={index === this.selectedIndex}
-                        onClick={(event) => this.handleMenuItemClick(event, index)}
-                      >
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Popper>
-      </Grid>*/}
-              
-             <ControlledOpenSelect onChange={this.handleChange}/>
-              <Button className="btn btn-primary col-2 ml-2" onClick={this.setTimeForSocial}>
+             <ButtonGroup variant="contained" color="primary" onChange={this.handleChange}/>
+	    <Dialog />
+      &nbsp;
+              <Button style={{ width: '100px', height: '40px'}} variant="contained" color="primary" onClick={this.setTimeForSocial}>
 		  Meeting
 	      </Button>
-
-      {/*
-              <button
-                className="btn btn-primary col-2 ml-2"
-                onClick={this.setTimeForSocial}
-              >
-                Meetings
-              </button>
-              <button
-                className="btn btn-primary col-2 ml-2"
-                onClick={this.setTimeForCoffee}
-              >
-                Break
-              </button>
-	      */}
             </div>
             <div className="content">
-              	<Button style={{ width: '100px', height: '40px', backgroundColor: "#00cc44" }} variant="contained" color="primary" onClick={this.play}>
+              	<Button style={{ width: '50px', height: '40px', backgroundColor: "#00cc44" }} variant="contained" color="primary" onClick={this.play}>
 		  <KeyboardArrowRightIcon />
-		    Start
 		</Button>
 	    &nbsp;
-		<Button style={{ width: '100px', height: '40px'}} variant="contained" color="secondary" onClick={this.reset}>
+		<Button style={{ width: '50px', height: '40px'}} variant="contained" color="secondary" onClick={this.reset}>
 		  <StopIcon />
-		    Stop
 		</Button>
             </div>
           </div>
