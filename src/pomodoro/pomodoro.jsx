@@ -13,6 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import Typography from '@material-ui/core/Typography';
 import Dialog from './dialog';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
+import PauseIcon from '@material-ui/icons/Pause';
 
 export default class Pomodoro extends React.Component {
   constructor() {
@@ -339,7 +340,7 @@ export default class Pomodoro extends React.Component {
   renderTimer = (timer) => {
     return(
       <div>
-    <CountdownCircleTimer style={{width: 'auto'}}
+    <CountdownCircleTimer className="timer-wrapper" style={{margin: '20px'}}
       {...this.timerProps}
 	isPlaying={this.state.play}
 	duration={1200}
@@ -378,16 +379,19 @@ export default class Pomodoro extends React.Component {
       </form>
             </div>
             <div className="content display">
-             <ButtonGroup variant="contained" color="primary" onChange={this.handleChange}/>
 	    <Dialog />
       &nbsp;
-              <Button style={{ width: '100px', height: '40px'}} variant="contained" color="primary" onClick={this.setTimeForSocial}>
+              <Button style={{ width: '100px', height: '40px', backgroundColor: "#1a4370" }} variant="contained" color="primary" onClick={this.setTimeForSocial}>
 		  Meeting
 	      </Button>
             </div>
             <div className="content">
               	<Button style={{ width: '50px', height: '40px', backgroundColor: "#00cc44" }} variant="contained" color="primary" onClick={this.play}>
 		  <KeyboardArrowRightIcon />
+		</Button>
+	    &nbsp;
+              	<Button style={{ width: '50px', height: '40px', backgroundColor: "#dce52d" }} variant="contained" color="primary" onClick={this.play}>
+		  <PauseIcon />
 		</Button>
 	    &nbsp;
 		<Button style={{ width: '50px', height: '40px'}} variant="contained" color="secondary" onClick={this.reset}>

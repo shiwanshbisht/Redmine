@@ -22,8 +22,8 @@ import Typography from '@material-ui/core/Typography';
 const data = ['Development', 'Designing', 'Content', 'Marketing', 'Planning', 'Management'];
 const useStyles = makeStyles({
   avatar: {
-    backgroundColor: blue[100],
-    color: blue[600],
+    color: "white",
+    backgroundColor: "#1a4370",
   },
 });
 
@@ -41,7 +41,9 @@ function SimpleDialog(props) {
 
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">Choose category</DialogTitle>
+      <DialogTitle id="simple-dialog-title">
+	    <Typography variant="h5"> Choose category </Typography>
+    </DialogTitle>
       <List >
     { /* Development */ }
           <ListItem button onClick={() => handleListItemClick(data[0])} key={data[0]}>
@@ -131,7 +133,7 @@ export default function SimpleDialogDemo() {
     { /*
       <Typography variant="subtitle1">Selected: {selectedValue}</Typography>
       */ }
-      <Button variant="contained" color="primary" style={{ width: '100px', height: '40px'}} onClick={handleClickOpen}>
+      <Button variant="contained" color="primary" style={{ width: '100px', height: '40px', backgroundColor: "#1a4370"}} onClick={handleClickOpen}>
 	  Work
       </Button>
       <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
