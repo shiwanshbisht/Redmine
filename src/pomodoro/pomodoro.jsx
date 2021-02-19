@@ -18,6 +18,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import Grid from "@material-ui/core/Grid";
 import ControlledOpenSelect from "./ControlledOpenSelect";
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import StopIcon from '@material-ui/icons/Stop';
+import TextField from "@material-ui/core/TextField";
+import Typography from '@material-ui/core/Typography';
 
 export default class Pomodoro extends React.Component {
   constructor() {
@@ -122,7 +126,7 @@ export default class Pomodoro extends React.Component {
     const work = this.state.work ? `Working On ${this.state.work}` : "Work";
     return [
       { type: work, time: 1500 },
-      { type: "In a Meeting", time: 1200 },
+      { type: "Meeting", time: 1200 },
       { type: "On a Break", time: 300 },
     ];
   }
@@ -145,7 +149,7 @@ export default class Pomodoro extends React.Component {
 
   play() {
     if (!this.state.value) {
-      alert("Please enter Title");
+      alert("Please enter Title for your tracker");
       return;
     }
     if (true === this.state.play) return;
@@ -332,10 +336,6 @@ export default class Pomodoro extends React.Component {
         "https://discord.com/api/webhooks/780830846575312927/h_NKiNA2NyQ3YOioLVjDOedsyBhowWIf2TW7YIQuTdjT134elK_SxOTSE1tmaY-PRn5O",
         embed
       );
-      // await axios.post(
-      //     "https://discord.com/api/webhooks/808061916152070194/d0q51NFs8eWDHaQVJPKfsk1UbTYE1WlhF4r7CChWNAADOxZQs4Ke2c0n1qIuSIruFihH",
-      //     embed
-      // );
     } catch (err) {
       alert(err);
     }
@@ -354,11 +354,14 @@ export default class Pomodoro extends React.Component {
           <div className="flex-fill">
             <div className="content display timer ">
               <span className="time">
-                <h1>Time Tracker</h1>
-                {this.format(this.state.time)}
+	      <Typography variant="h5"> Tracker </Typography>
+	      <Typography variant="h2"> {this.format(this.state.time)} </Typography>
+                
               </span>
               <span className="timeType">
-                {this.formatType(this.state.timeType)}
+		<Typography variant="h5"> {this.formatType(this.state.timeType)} </Typography>
+	       <br /> 
+      {/*
                 <div className="row d-flex justify-content-center">
                   <input
                     className="form-control col-5 col-sm-3 col-md-4  input"
@@ -367,6 +370,10 @@ export default class Pomodoro extends React.Component {
                     onChange={this.handleChangeInput}
                   />
                 </div>
+		*/}
+      <form>
+	      <TextField id="outlined-basic" style={{ width: '500px' }} label="What are you working on?" value={this.state.value} onChange={this.handleChangeInput} variant="outlined" />
+      </form>
               </span>
             </div>
             <div className="content display">
@@ -548,14 +555,11 @@ export default class Pomodoro extends React.Component {
       </Grid>*/}
               
              <ControlledOpenSelect onChange={this.handleChange}/>
-              {/*<Button className="btn btn-primary col-2 ml-2" onClick={this.setTimeForSocial}>
-			  Meetings
-			</Button>
-      <Button className="btn btn-primary col-2 ml-2"
-                                onClick={this.setTimeForCoffee}>
-                                Break
-    </Button>*/}
+              <Button className="btn btn-primary col-2 ml-2" onClick={this.setTimeForSocial}>
+		  Meeting
+	      </Button>
 
+      {/*
               <button
                 className="btn btn-primary col-2 ml-2"
                 onClick={this.setTimeForSocial}
@@ -568,27 +572,18 @@ export default class Pomodoro extends React.Component {
               >
                 Break
               </button>
+	      */}
             </div>
             <div className="content">
-              {/*	<Button className="fa fa-play-circle fa-5x btnIcon" variant="contained" color="primary" onClick={this.play}>
-			  Play
-			</Button>
-	  &nbsp;
-			<Button variant="contained" color="primary">
-			  Stop
-  </Button>*/}
-              <i aria-hidden="true" onClick={this.play}>
-                <PlayCircleFilledIcon style={{ fontSize: 80 }} />
-              </i>
-              <i
-                aria-hidden="true"
-                onClick={this.reset}
-              ><PauseCircleFilledIcon style={{ fontSize: 80 }}/></i>
-              <i
-                className="fa fa-stop-circle fa-5x btnIcon"
-                aria-hidden="true"
-                onClick={this.alert}
-              ></i>
+              	<Button style={{ width: '100px', height: '40px', backgroundColor: "#00cc44" }} variant="contained" color="primary" onClick={this.play}>
+		  <KeyboardArrowRightIcon />
+		    Start
+		</Button>
+	    &nbsp;
+		<Button style={{ width: '100px', height: '40px'}} variant="contained" color="secondary" onClick={this.reset}>
+		  <StopIcon />
+		    Stop
+		</Button>
             </div>
           </div>
         </div>
