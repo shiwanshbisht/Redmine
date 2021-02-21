@@ -375,7 +375,7 @@ export default class Pomodoro extends React.Component {
 		  { this.renderTimer(this.state.time) }
 		</span>
 		<form>
-		<TextField id="outlined-basic" style={{ width: '300px', margin: '20px' }} label="What are you working on right now?" value={this.state.value} onChange={this.handleChangeInput} variant="outlined" />
+		<TextField id="outlined-basic" style={{ width: '300px', margin: '20px' }} label="What are you working on?" value={this.state.value} onChange={this.handleChangeInput} variant="outlined" />
       </form>
             </div>
             <div className="content display">
