@@ -26,7 +26,7 @@ Once approved by one of the admins, you can login yourself with your login name 
 
 ## **Features**
 
-###  Issue Tracking
+###  Issues Tracking
 An issue is bound to a project, created/updated by the members of the project. 
 
 #### **Generate issues**
@@ -163,7 +163,7 @@ It gives an overview of all the activities under the selected project and is div
 
 <p align="center">
   <a href="https://koders.in/">
-    <img src="./assets/logo1.png" alt="Logo" width="200" height="200">
+    <img src="" alt="Logo" width="200" height="200">
   </a>
 </p>
 <p align="center">
