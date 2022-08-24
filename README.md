@@ -171,7 +171,8 @@ It gives an overview of all the activities under the selected project and is div
   <br>
   <br>
   An institution that caters to all your software needs with their touch of Koding.
-  <br>
+  <br>![images](https://user-images.githubusercontent.com/68678634/186405636-1d043650-b1b8-42c4-9044-2740715f26b8.png)
+
   <a href="https://www.koders.in"><strong>Explore More»</strong></a>
   <br>
   <br>
